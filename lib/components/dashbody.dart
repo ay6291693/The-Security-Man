@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,28 +26,19 @@ class _DashBodyState extends State<DashBody> {
       child: Column(
         children: <Widget>[
           HeaderWithSearchBox(size: size),
-          TitleWithMoreBtn(title: "Recommended", press: (){}),
+          TitleWithMoreBtn(title: "Recommended", press: () {}),
           //It will take 40% of the screen width
           RecommendedSecurityCompanies(),
-          TitleWithMoreBtn(title: "Features",press: (){},),
+          TitleWithMoreBtn(
+            title: "Features",
+            press: () {},
+          ),
           Features(),
           SizedBox(
             height: 50,
-          )
+          ),
         ],
       ),
     );
   }
-
-
 }
-
-
-
-
-
-
-
-
-
-
