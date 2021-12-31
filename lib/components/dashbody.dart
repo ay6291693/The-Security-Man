@@ -35,7 +35,7 @@ class _DashBodyState extends State<DashBody> {
           ),
           Features(),
           SizedBox(
-            height: 50,
+            height: 0,
           ),
         ],
       ),

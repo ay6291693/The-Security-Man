@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/components/RecommendedSecurityCard.dart';
+import 'package:thesecurityman/details/details_page.dart';
 
 class RecommendedSecurityCompanies extends StatelessWidget {
   const RecommendedSecurityCompanies({
@@ -13,28 +14,41 @@ class RecommendedSecurityCompanies extends StatelessWidget {
       child:  Row(
         children: <Widget>[
           RecommendedSecurityCard(
-            image: "assets/image_1.png",
+            image: "assets/Secu_image_1.png",
             title: "Bombay Intelligence Security",
             location: "Alkapuri, Vadodara",
-            press: (){},
+            press: (){
+               Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsPage()));
+            },
           ),
           RecommendedSecurityCard(
-            image: "assets/image_2.png",
+            image: "assets/Secu_image_2.png",
             title: "Detective Security Service",
             location: "Alkapuri, Vadodara",
-            press: (){},
+            press: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsPage()));
+            },
           ),
           RecommendedSecurityCard(
-            image: "assets/image_3.png",
+            image: "assets/Secu_image_3.png",
             title: "CheckMate Security Services",
             location: "Fatehgunj, Vadodara",
-            press: (){},
+            press: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsPage()));
+            },
           ),
           RecommendedSecurityCard(
-            image: "assets/image_1.png",
+            image: "assets/Secu_image_4.png",
             title: "Gujarat Security Services",
             location: "Alkapuri, Vadodara",
-            press: (){},
+            press: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context)=> DetailsPage()
+                  )
+              );
+            },
           )
         ],
       ),

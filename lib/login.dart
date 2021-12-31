@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/components/input_container.dart';
+import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/registerDashboard.dart';
 import 'dashboard.dart';
 
@@ -24,7 +25,7 @@ class LoginState extends State<Login> {
            keyboardType: TextInputType.text,
            decoration: InputDecoration(
              labelText: "Username/Email",
-             icon: Icon(icon,color: Color(0xFF23408e),),
+             icon: Icon(icon,color: mainColor,),
              border: InputBorder.none,
              focusedBorder: InputBorder.none,
              contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
@@ -52,7 +53,7 @@ class LoginState extends State<Login> {
            obscureText: true,
            decoration: InputDecoration(
              labelText: "Password",
-             icon: Icon(icon,color: Color(0xFF23408e),),
+             icon: Icon(icon,color: mainColor,),
              border: InputBorder.none,
              focusedBorder: InputBorder.none,
              contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
@@ -95,7 +96,7 @@ class LoginState extends State<Login> {
         child: Container(
           width: size.width * 0.8,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30), color: Color(0xFF23408e)),
+              borderRadius: BorderRadius.circular(30), color: mainColor),
           padding: EdgeInsets.symmetric(vertical: 20),
           alignment: Alignment.center,
           child: Text(
@@ -115,7 +116,7 @@ class LoginState extends State<Login> {
         child: Container(
           width: size.width * 0.8,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30), color: Color(0xFF23408e)),
+              borderRadius: BorderRadius.circular(30), color: mainColor),
           padding: EdgeInsets.symmetric(vertical: 20),
           alignment: Alignment.center,
           child: Text(
@@ -150,7 +151,7 @@ class LoginState extends State<Login> {
                     ),
                     Text(
                       "The Security Man",
-                      style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: Color(0xFF23408e),fontFamily: 'Hina'),),
+                      style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: mainColor,fontFamily: 'Hina'),),
                     SizedBox(
                       height: 30,
                     ),

@@ -16,7 +16,7 @@ class RecommendedSecurityCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(
           left: padding,
-          top: padding/2,
+          top: padding*0.1,
           bottom: padding*1.3
       ),
       // color: Colors.black87,
@@ -27,7 +27,11 @@ class RecommendedSecurityCard extends StatelessWidget {
             onTap: press,
             child: Column(
               children: <Widget>[
-                Image.asset(image),
+               Container(
+                 child:  Image.asset(image),
+                 height: 150,
+                 width: 120,
+               ),
                 Container(
                   padding: EdgeInsets.all(padding/2),
                   decoration: BoxDecoration(

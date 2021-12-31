@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
+import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -40,6 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Text("The Security Man",
                     style: TextStyle(
                         fontSize: 40,
+                        color: mainColor,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Hina')),
                 SizedBox(

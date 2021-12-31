@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/contents.dart';
 import 'package:thesecurityman/homepage.dart';
 
@@ -40,7 +41,7 @@ class _OnboardingState extends State<Onboarding> {
     return Scaffold(
       appBar: AppBar(
         title: Text("The Security Man"),
-        backgroundColor: Color(0xFF23408e),
+        backgroundColor: mainColor,
         toolbarHeight: 70,
       ),
       backgroundColor: Colors.white,
@@ -76,6 +77,7 @@ class _OnboardingState extends State<Onboarding> {
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'Hina'
                           ),
                         ),
                         SizedBox(
@@ -122,7 +124,7 @@ class _OnboardingState extends State<Onboarding> {
                   fontSize: 18,
                 ),
               ),
-              color: Color(0xFF23408e),
+              color: mainColor,
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),

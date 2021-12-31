@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:thesecurityman/constants.dart';
 import 'components/input_container.dart';
 import 'homepage.dart';
 
@@ -30,7 +31,7 @@ class RegisterState extends State<Register>{
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             labelText: "Name",
-            icon: Icon(icon,color: Color(0xFF23408e),),
+            icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
@@ -54,7 +55,7 @@ class RegisterState extends State<Register>{
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             labelText: "Phone Number",
-            icon: Icon(icon,color: Color(0xFF23408e),),
+            icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
@@ -87,7 +88,7 @@ class RegisterState extends State<Register>{
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             labelText: "Username/Email",
-            icon: Icon(icon,color: Color(0xFF23408e),),
+            icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
@@ -115,7 +116,7 @@ class RegisterState extends State<Register>{
           obscureText: true,
           decoration: InputDecoration(
             labelText: "Password",
-            icon: Icon(icon,color: Color(0xFF23408e),),
+            icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
@@ -149,7 +150,7 @@ class RegisterState extends State<Register>{
           obscureText: true,
           decoration: InputDecoration(
             labelText: "Confirm Password",
-            icon: Icon(icon,color: Color(0xFF23408e),),
+            icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
@@ -182,11 +183,12 @@ class RegisterState extends State<Register>{
               SnackBar(
                   content: Text("Password is not matching"),
                   duration: Duration(seconds: 2),
-                  backgroundColor: Color(0xFF23408e),
+                  backgroundColor: mainColor,
                   behavior: SnackBarBehavior.fixed
                   )
           );
-        }else{
+        }
+        else{
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text("Saving Data... Redirecting to Login Page"),
               duration: Duration(seconds: 2),
@@ -210,7 +212,7 @@ class RegisterState extends State<Register>{
       child: Container(
         width: size.width * 0.8,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30), color: Color(0xFF23408e)),
+            borderRadius: BorderRadius.circular(30), color: mainColor),
         padding: EdgeInsets.symmetric(vertical: 20),
         alignment: Alignment.center,
         child: Text(
@@ -246,7 +248,7 @@ class RegisterState extends State<Register>{
                       ),
                       Text(
                         "The Security Man",
-                        style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: Color(0xFF23408e),fontFamily: 'Hina'),),
+                        style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: mainColor,fontFamily: 'Hina'),),
                       SizedBox(
                         height: 5,
                       ),

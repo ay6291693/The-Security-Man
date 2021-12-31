@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/Register.dart';
+import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/homepage.dart';
+import 'package:thesecurityman/main.dart';
 
 class RegisterDashboard extends StatefulWidget {
   @override
@@ -30,7 +32,7 @@ class _RegisterDashboardState extends State<RegisterDashboard> {
               ),
               Text(
                 "The Security Man",
-                style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: Color(0xFF23408e),fontFamily: 'Hina'),),
+                style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: mainColor,fontFamily: 'Hina'),),
               SizedBox(
                 height: 40,
               ),
@@ -53,7 +55,7 @@ class _RegisterDashboardState extends State<RegisterDashboard> {
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(30))),
-                color: Color(0xFF23408e),
+                color: mainColor,
                 child: Text(
                   "Customer",
                   style: TextStyle(
@@ -75,7 +77,7 @@ class _RegisterDashboardState extends State<RegisterDashboard> {
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(30))),
-                color: Color(0xFF23408e),
+                color: mainColor,
                 child: Text(
                   "Security Man",
                   style: TextStyle(
@@ -97,7 +99,7 @@ class _RegisterDashboardState extends State<RegisterDashboard> {
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(30))),
-                color: Color(0xFF23408e),
+                color: mainColor,
                 child: Text(
                   "Business Partner",
                   style: TextStyle(

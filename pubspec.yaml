@@ -58,6 +58,16 @@ flutter:
     - assets/bottom_img_1.png
     - assets/bottom_img_2.png
     - assets/SplashScreen/icon_blue.png
+    - assets/SplashScreen/heart-icon.svg
+    - assets/SplashScreen/flower.svg
+    - assets/Secu_image_1.png
+    - assets/Secu_image_2.png
+    - assets/Secu_image_3.png
+    - assets/Secu_image_4.png
+    - assets/Featu_image_1.png
+    - assets/Featu_image_2.png
+    - assets/Featu_image_3.png
+    - assets/SplashScreen/user-icon.svg
     - assets/SplashScreen/icon_white.svg
     - assets/SplashScreen/Search.svg
     - assets/SplashScreen/logo_png.png

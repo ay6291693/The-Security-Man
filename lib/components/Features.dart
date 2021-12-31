@@ -13,8 +13,9 @@ class Features extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: <Widget>[
-          FeatureCompanyCard(image: "assets/bottom_img_1.png",press: (){},),
-          FeatureCompanyCard(image: "assets/bottom_img_2.png",press: (){},),
+          FeatureCompanyCard(image: "assets/Featu_image_1.png",press: (){},),
+          FeatureCompanyCard(image: "assets/Featu_image_2.png",press: (){},),
+          FeatureCompanyCard(image: "assets/Featu_image_3.png",press: (){},),
         ],
       ),
     );
