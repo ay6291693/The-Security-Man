@@ -75,7 +75,7 @@ class _OnboardingState extends State<Onboarding> {
                         Text(
                           contents[i].title,
                           style: TextStyle(
-                            fontSize: 28,
+                            fontSize: 30,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Hina'
                           ),
@@ -86,7 +86,7 @@ class _OnboardingState extends State<Onboarding> {
                         Expanded(child:  Text(
                           contents[i].description,
                           textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: 18, color: Colors.black,fontFamily: 'Hina'),
+                          style: TextStyle(fontSize: 20, color: Colors.black,fontFamily: 'Hina'),
                         ))
 
                       ],
@@ -104,7 +104,7 @@ class _OnboardingState extends State<Onboarding> {
               )
           ),
           Container(
-            height: 45,
+            height: 60,
             margin: EdgeInsets.all(20),
             width: double.infinity,
             child: FlatButton(

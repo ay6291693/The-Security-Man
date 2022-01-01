@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.1
   lottie: ^0.6.0
   flutter_svg: ^0.19.1
+  google_fonts: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -52,9 +53,6 @@ flutter:
   assets:
     - assets/
     - assets/tsm.json   #splashscreen json
-    - assets/image_1.png
-    - assets/image_2.png
-    - assets/image_3.png
     - assets/bottom_img_1.png
     - assets/bottom_img_2.png
     - assets/SplashScreen/icon_blue.png
@@ -64,6 +62,17 @@ flutter:
     - assets/Secu_image_2.png
     - assets/Secu_image_3.png
     - assets/Secu_image_4.png
+    - assets/Secu_image_6.png
+    - assets/Secu_image_7.png
+    - assets/Secu_image_8.png
+    - assets/Secu_image_9.png
+    - assets/Secu_image_10.png
+    - assets/Secu_image_11.png
+    - assets/Secu_image_12.png
+    - assets/Secu_image_13.png
+    - assets/Secu_image_14.png
+    - assets/Secu_image_15.png
+    - assets/Secu_image_16.png
     - assets/Featu_image_1.png
     - assets/Featu_image_2.png
     - assets/Featu_image_3.png
