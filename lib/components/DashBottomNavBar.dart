@@ -31,16 +31,16 @@ class DashBottomNavBar extends StatelessWidget {
         children: <Widget>[
           IconButton(
             icon: Icon(Icons.favorite),
-            color: dashColor,
-            splashColor: mainColor.withOpacity(0.45),
+            color: mainColor,
+            splashColor: dashColor.withOpacity(0.45),
             splashRadius: 30,
             onPressed: () {},
             iconSize: 28,
           ),
           IconButton(
             icon: Icon(Icons.home_outlined),
-            color: dashColor,
-            splashColor: mainColor.withOpacity(0.45),
+            color: mainColor,
+            splashColor: dashColor.withOpacity(0.45),
             splashRadius: 30,
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
@@ -49,8 +49,8 @@ class DashBottomNavBar extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.person),
-            color: dashColor,
-            splashColor: mainColor.withOpacity(0.45),
+            color: mainColor,
+            splashColor: dashColor.withOpacity(0.45),
             onPressed: () {},
             splashRadius: 30,
             iconSize: 28,

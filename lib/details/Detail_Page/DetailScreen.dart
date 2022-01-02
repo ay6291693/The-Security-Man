@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/constants.dart';
+import 'package:thesecurityman/details/Companies.dart';
 import 'package:thesecurityman/details/Detail_Page/body.dart';
 
 class DetailsScreen extends StatelessWidget {
+
+  final Companies companies;
+
+  const DetailsScreen({Key key, this.companies}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
       appBar: buildAppBar(context),
-      body: Body(),
+      body: Body(companies: companies,),
     );
   }
 

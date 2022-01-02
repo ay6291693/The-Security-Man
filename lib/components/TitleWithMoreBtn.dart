@@ -25,7 +25,7 @@ class TitleWithMoreBtn extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)
               ),
-              color: dashColor,
+              color: mainColor,
               onPressed: press,
               child: Text(
                   "More",

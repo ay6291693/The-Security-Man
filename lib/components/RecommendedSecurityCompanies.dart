@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/components/RecommendedSecurityCard.dart';
+import 'package:thesecurityman/details/Companies.dart';
+import 'package:thesecurityman/details/Detail_Page/DetailScreen.dart';
 import 'package:thesecurityman/details/components/CompanyDetailPage.dart';
 
 
 class RecommendedSecurityCompanies extends StatelessWidget {
+
   const RecommendedSecurityCompanies({
     Key key,
   }) : super(key: key);
@@ -19,7 +22,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Bombay Intelligence Security",
             location: "Alkapuri, Vadodara",
             press: (){
-               Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
+               Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[0])));
             },
           ),
           RecommendedSecurityCard(
@@ -27,7 +30,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Detective Security Service",
             location: "Alkapuri, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[1])));
             },
           ),
           RecommendedSecurityCard(
@@ -35,7 +38,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "CheckMate Security Services",
             location: "Fatehgunj, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[2])));
             },
           ),
           RecommendedSecurityCard(
@@ -43,7 +46,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Gujarat Security Services",
             location: "Alkapuri, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[3])));
             },
           )
         ],

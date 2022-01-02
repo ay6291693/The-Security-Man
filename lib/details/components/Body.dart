@@ -36,7 +36,7 @@ class Body extends StatelessWidget {
                     itemIndex: index,
                     companies: companies[index],
                     press: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[index])));
                     },
                   ),
                 )

@@ -88,7 +88,6 @@ class LoginState extends State<Login> {
           }
           _formKey.currentState.save();
           //Write code here to check the username and password in database
-
           Navigator.push(context,
           MaterialPageRoute(builder: (context)=> Dashboard()));
         },
