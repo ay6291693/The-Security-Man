@@ -1,12 +1,12 @@
 class Companies{
-
+  final int id;
   final String title,location,image,description;
- Companies(this.title, this.location, this.image, this.description);
+ Companies(this.id,this.title, this.location, this.image, this.description);
 
 }
 
 List<Companies> companies = [
-  Companies(
+  Companies(1,
       "Bombay Intelligence Security",
       "Alkapuri, Vadodara",
       "assets/Secu_image_1.png",
@@ -17,7 +17,7 @@ List<Companies> companies = [
           "Over the years BIS grew from strength to strength. By a very professional approach & by making value"
           " additions to meet the ever growing demands of the Clients,"
           "BIS forged ahead with steely resolve & determination to become one of the Premier Agencies of India."),
-  Companies(
+  Companies(3,
       "Detective Security Service",
       "Alkapuri, Vadodara",
       "assets/Secu_image_2.png",
@@ -30,7 +30,7 @@ List<Companies> companies = [
       " has been one that can be documented both on celluloid & the idiot box. Today DSS Group has more than"
       " 10000 guards spread over six states in India. They provide Bespoke solutions at Ports, Refineries,"
       " Industries etc."),
-  Companies(
+  Companies(4,
       "CheckMate Security Services",
       "Fatehgunj, Vadodara",
       "assets/Secu_image_3.png",
@@ -39,7 +39,7 @@ List<Companies> companies = [
       "and security audit. Checkmate Services Pvt Ltd (Checkmate Group of Companies) offers manned guarding "
       "services and over the span of two decades,it has emerged as one of the largest Indian Security and "
       "Safety Services Providers."),
-  Companies(
+  Companies(8,
       "Gujarat Security Security",
       "Alkapuri, Vadodara",
       "assets/Secu_image_4.png",
@@ -52,7 +52,7 @@ List<Companies> companies = [
       "security profile of providing security through frisking, showing agility on suspicious activities, and "
       "looking after parking and other related concerns, the guards have also been provided the basic training "
       "for fire fighting and first aid along with the ability to handle heavy visitor traffic during the week ends."),
-  Companies(
+  Companies(9,
       "Tiger Security Services",
       "Sayaniganj, Vadodara",
       "assets/Secu_image_5.png",
@@ -63,7 +63,7 @@ List<Companies> companies = [
           "Security Guards Services, Domestic Security Guards Services, Project and Event Security Services, "
           "Personal Body guards, Security Guards Training, Security Guards Recruitment Services, Security "
           "supervisors, Guarding Services Lady Security Officers Vadodara India."),
-  Companies(
+  Companies(6,
       "Subham Protection Force",
       "Alkapuri, Vadodara",
       "assets/Secu_image_6.png",
@@ -72,7 +72,7 @@ List<Companies> companies = [
           "Detective Agencies. If You Will Join us Then You Will Get Transparency Customer Satisfaction with "
           "Right Guidance of Our Services Along with the Trust Seal of Shubham Protection Force You will "
           "Recommend us two References on the base of Your Services with our best Quality Customer Support."),
-  Companies(
+  Companies(10,
       "Shrikant Security Services",
       " Atladara, Vadodara",
       "assets/Secu_image_7.png",
@@ -82,7 +82,7 @@ List<Companies> companies = [
       " Over the course of its journey, this business has established a firm foothold in it’s industry. "
       "The belief that customer satisfaction is as important as their products and services, have helped "
       "this establishment garner a vast base of customers, which continues to grow by the day."),
-  Companies(
+  Companies(12,
       "Globus Security & Detective Services",
       "Tarsali , Vadodara",
       "assets/Secu_image_8.png",
@@ -92,7 +92,7 @@ List<Companies> companies = [
       "Over the course of its journey, this business has established a firm foothold in it’s industry. "
       "The belief that customer satisfaction is as important as their products and services, have helped "
       "this establishment garner a vast base of customers, which continues to grow by the day. "),
-  Companies(
+  Companies(13,
       "Group 7 Guards India Pvt Ltd",
       "Fatehgunj , Vadodara.",
       "assets/Secu_image_9.png",
@@ -102,7 +102,7 @@ List<Companies> companies = [
       "Over the course of its journey, this business has established a firm foothold in it’s industry. "
       "The belief that customer satisfaction is as important as their products and services, have helped "
       "this establishment garner a vast base of customers, which continues to grow by the day. "),
-  Companies(
+  Companies(14,
       "Prince Security Services",
       "Gotri road, Vadodara",
       "assets/Secu_image_10.png",
@@ -112,7 +112,7 @@ List<Companies> companies = [
       "journey, this business has established a firm foothold in it’s industry. The belief that customer "
       "satisfaction is as important as their products and services, have helped this establishment garner a "
       "vast base of customers, which continues to grow by the day."),
-  Companies(
+  Companies(19,
       "Nexus Industrial Security Agency",
       "Karelibaug , Vadodara",
       "assets/Secu_image_11.png",
@@ -122,7 +122,7 @@ List<Companies> companies = [
       "of Vadodara. Over the course of its journey, this business has established a firm foothold in it’s "
       "industry. The belief that customer satisfaction is as important as their products and services, have "
       "helped this establishment garner a vast base of customers, which continues to grow by the day."),
-  Companies(
+  Companies(20,
       "Swami Security Services",
       " Nizampura, Vadodara",
       "assets/Secu_image_12.png",
@@ -134,7 +134,7 @@ List<Companies> companies = [
       "garner a vast base of customers, which continues to grow by the day. This business employs individuals "
       "that are dedicated towards their respective roles and put in a lot of effort to achieve the common vision "
       "and larger goals of the company. "),
-  Companies(
+  Companies(21,
       "Om Security Services",
       "Waghodia Road, Vadodara",
       "assets/Secu_image_13.png",
@@ -147,7 +147,7 @@ List<Companies> companies = [
           "which continues to grow by the day. This business employs individuals that are dedicated towards "
           "their respective roles and put in a lot of effort to achieve the common vision and larger goals of "
           "the company. "),
-  Companies(
+  Companies(24,
       "Cosmos Security",
       "Old Padra Road, Vadodara",
       "assets/Secu_image_14.png",
@@ -157,7 +157,7 @@ List<Companies> companies = [
           "Over the course of its journey, this business has established a firm foothold in it’s industry. "
           "The belief that customer satisfaction is as important as their products and services, have helped "
           "this establishment garner a vast base of customers, which continues to grow by the day. "),
-  Companies(
+  Companies(30,
       "Sci Securities Services Pvt Ltd.",
       "Sayaji Ganj, Vadodara",
       "assets/Secu_image_15.png",
@@ -169,7 +169,7 @@ List<Companies> companies = [
           "this establishment garner a vast base of customers, which continues to grow by the day. "
           "This business employs individuals that are dedicated towards their respective roles and put in a "
           "lot of effort to achieve the common vision and larger goals of the company. "),
-  Companies(
+  Companies(66,
       "D D Services",
       "Channi , Vadodara",
       "assets/Secu_image_16.png",

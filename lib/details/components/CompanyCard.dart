@@ -48,12 +48,12 @@ class CompanyCard extends StatelessWidget {
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: Container(
+                      child: Hero(tag: '${companies.id}', child: Container(
                         padding: EdgeInsets.symmetric(horizontal: padding),
                         height: 140,
                         width: 190,
                         child: Image.asset(companies.image,fit: BoxFit.fill,),
-                      ),
+                      )),
                     )
                   ],
                 )

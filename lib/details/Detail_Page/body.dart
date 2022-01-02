@@ -33,11 +33,13 @@ class Body extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      height: 175,
-                      width: 175,
-                      child: Image.asset(companies.image, fit: BoxFit.fill,),
-                    ),
+                    Hero(
+                        tag: '${companies.id}' ,
+                        child: Container(
+                          height: 175,
+                          width: 175,
+                          child: Image.asset(companies.image, fit: BoxFit.fill,),
+                        ),),
                     SizedBox(
                       height: 20,
                     ),

@@ -16,9 +16,7 @@ class _DashboardState extends State<Dashboard> {
       backgroundColor: mainColor, // Color(0xFF0C9869),
       leading: IconButton(
         icon: SvgPicture.asset("assets/SplashScreen/icon_white.svg"),
-        onPressed: () {
-          //Navigator.push(context, MaterialPageRoute(builder: (context)=> Drawer()));
-        },
+        onPressed: () {},
       ),
     );
   }
