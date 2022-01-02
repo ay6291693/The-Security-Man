@@ -1,40 +1,54 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
+import 'package:thesecurityman/details/Companies.dart';
+import 'package:thesecurityman/details/Detail_Page/DetailScreen.dart';
+import 'package:thesecurityman/details/components/CompanyCard.dart';
+import 'package:thesecurityman/details/components/SearchBox.dart';
 
 class Body extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.all(padding),
-          padding: EdgeInsets.symmetric(
-            horizontal: padding,
-            vertical: padding/4
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Colors.white.withOpacity(0.4),
-            boxShadow: [kDefaultShadow]
-          ),
-          child: TextField(
-            style: TextStyle(
-              color: Colors.white
-            ),
-            decoration: InputDecoration(
-              icon: Icon(Icons.search,size: 30,),
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: "Search",
-              hintStyle: TextStyle(
-                color: Colors.white
-              )
-            ),
-          ),
+    return SafeArea(
+      bottom: false,
+        child: Column(
+          children: [
+            SearchBox(changed: (value){}),
+            SizedBox(height: padding/4),
+            Expanded(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 70) ,
+                  //Our Background
+                  decoration: BoxDecoration(
+                      color: kBackgroundColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40)
+                      )
+                  ),
+                ),
+                ListView.builder(
+                  itemCount: companies.length,
+                  itemBuilder: (context,index) => CompanyCard(
+                    itemIndex: index,
+                    companies: companies[index],
+                    press: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen()));
+                    },
+                  ),
+                )
+              ],
+            )
         )
       ],
+    )
     );
   }
 }
+
+
+
+

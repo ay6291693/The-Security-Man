@@ -29,7 +29,7 @@ class HeaderWithSearchBox extends StatelessWidget {
             ),
             height: size.height*0.2 - 27,
             decoration: BoxDecoration(
-              color: dashColor,
+              color: mainColor,
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40),
                   bottomRight: Radius.circular(40)
@@ -45,9 +45,9 @@ class HeaderWithSearchBox extends StatelessWidget {
                     )),
                 Spacer(flex: 1,),
                 Container(
-                  child: Image.asset("assets/SplashScreen/icon_blue.png"),
-                  height: 80,
-                  width: 80,
+                  child: Image.asset("assets/The.png"),
+                  height: 100,
+                  width: 100,
                 ),
               ],
             ),

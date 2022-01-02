@@ -13,7 +13,7 @@ class _DashboardState extends State<Dashboard> {
   AppBar buildAppBar() {
     return AppBar(
       elevation: 0,
-      backgroundColor: dashColor, // Color(0xFF0C9869),
+      backgroundColor: mainColor, // Color(0xFF0C9869),
       leading: IconButton(
         icon: SvgPicture.asset("assets/SplashScreen/icon_white.svg"),
         onPressed: () {},

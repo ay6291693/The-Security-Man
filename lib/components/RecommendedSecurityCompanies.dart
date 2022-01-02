@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/components/RecommendedSecurityCard.dart';
-import 'package:thesecurityman/details/details_page.dart';
+import 'package:thesecurityman/details/components/CompanyDetailPage.dart';
+
 
 class RecommendedSecurityCompanies extends StatelessWidget {
   const RecommendedSecurityCompanies({
@@ -18,7 +19,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Bombay Intelligence Security",
             location: "Alkapuri, Vadodara",
             press: (){
-               Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsPage()));
+               Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
             },
           ),
           RecommendedSecurityCard(
@@ -26,7 +27,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Detective Security Service",
             location: "Alkapuri, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
             },
           ),
           RecommendedSecurityCard(
@@ -34,7 +35,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "CheckMate Security Services",
             location: "Fatehgunj, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
             },
           ),
           RecommendedSecurityCard(
@@ -42,12 +43,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Gujarat Security Services",
             location: "Alkapuri, Vadodara",
             press: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context)=> DetailsPage()
-                  )
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
             },
           )
         ],

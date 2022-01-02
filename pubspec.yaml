@@ -55,6 +55,7 @@ flutter:
     - assets/tsm.json   #splashscreen json
     - assets/bottom_img_1.png
     - assets/bottom_img_2.png
+    - assets/The.png
     - assets/SplashScreen/icon_blue.png
     - assets/SplashScreen/heart-icon.svg
     - assets/SplashScreen/flower.svg

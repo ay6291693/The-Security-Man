@@ -22,3 +22,4 @@ const kDefaultShadow = BoxShadow(
 );
 
 const double padding = 20.0;
+

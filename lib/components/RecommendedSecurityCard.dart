@@ -29,7 +29,7 @@ class RecommendedSecurityCard extends StatelessWidget {
               children: <Widget>[
                Container(
                  child:  Image.asset(image),
-                 height: 150,
+                 height: 140,
                  width: 120,
                ),
                 Container(
@@ -54,10 +54,12 @@ class RecommendedSecurityCard extends StatelessWidget {
                           child: RichText(
                             text: TextSpan(
                                 children: [
-                                  TextSpan(text: "$title\n",style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                  TextSpan(text: "$title\n",
+                                      style: Theme.of(context).textTheme.bodyText2.copyWith(
                                       fontSize: 15,
                                       fontWeight: FontWeight.values[4]
-                                  )),
+                                  )
+                                  ),
                                   TextSpan(text: "$location",
                                       style: TextStyle(
                                           color: mainColor.withOpacity(0.7),

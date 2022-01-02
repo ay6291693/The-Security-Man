@@ -9,7 +9,8 @@ import 'package:thesecurityman/components/TitleWithCustomUnderline.dart';
 import 'package:thesecurityman/components/TitleWithMoreBtn.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/components/headerWithSearchBox.dart';
-import 'package:thesecurityman/details/details_page.dart';
+import 'package:thesecurityman/details/components/CompanyDetailPage.dart';
+
 
 class DashBody extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _DashBodyState extends State<DashBody> {
           TitleWithMoreBtn(
               title: "Recommended",
               press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
               }),
           //It will take 40% of the screen width
           RecommendedSecurityCompanies(),
