@@ -13,11 +13,18 @@ import 'package:thesecurityman/details/components/CompanyDetailPage.dart';
 
 
 class DashBody extends StatefulWidget {
+  final String identity;
+
+  const DashBody({Key key, this.identity}) : super(key: key);
   @override
-  _DashBodyState createState() => _DashBodyState();
+  _DashBodyState createState() => _DashBodyState(identity);
 }
 
 class _DashBodyState extends State<DashBody> {
+  final String identity;
+
+  _DashBodyState(this.identity);
+
   @override
   Widget build(BuildContext context) {
     //It will give the screen size
@@ -31,7 +38,7 @@ class _DashBodyState extends State<DashBody> {
           TitleWithMoreBtn(
               title: "Recommended",
               press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage(identity: identity,)));
               }),
           //It will take 40% of the screen width
           RecommendedSecurityCompanies(),

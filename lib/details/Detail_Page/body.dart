@@ -6,8 +6,9 @@ import 'package:thesecurityman/details/Companies.dart';
 class Body extends StatelessWidget {
 
   final Companies companies;
+  final String identity;
 
-  const Body({Key key, this.companies}) : super(key: key);
+  const Body({Key key, this.companies, this.identity}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -88,7 +89,83 @@ class Body extends StatelessWidget {
                 ),),
             )
           )
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        /*(identity == 'Customer' ? InkWell(
+          onTap: (){
+            //Navigator.
+          },
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            width: size.width * 0.9,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white),
+            padding: EdgeInsets.symmetric(vertical: 20),
+            alignment: Alignment.center,
+            child: Text(
+              "Want Security Service? Click here!",
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+          ),
+        ) :
+        InkWell(
+          onTap: (){
+            //Navigator.
+          },
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            width: size.width * 0.9,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white),
+            padding: EdgeInsets.symmetric(vertical: 20),
+            alignment: Alignment.center,
+            child: Text(
+              "Apply for job? Click here!",
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+          ),
+        )), */
+        if(identity == 'Customer') InkWell(
+          onTap: (){
+            //Navigator.
+          },
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            width: size.width * 0.9,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white),
+            padding: EdgeInsets.symmetric(vertical: 20),
+            alignment: Alignment.center,
+            child: Text(
+              "Want Security Service? Click here!",
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+          ),
         )
+        else if (identity == 'Security Man') InkWell(
+          onTap: (){
+            //Navigator.
+          },
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            width: size.width * 0.9,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white),
+            padding: EdgeInsets.symmetric(vertical: 20),
+            alignment: Alignment.center,
+            child: Text(
+              "Apply for job? Click here!",
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
+          ),
+        ),
+        SizedBox(height: 15,)
       ],
     );
   }

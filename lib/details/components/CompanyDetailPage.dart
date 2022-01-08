@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:thesecurityman/components/DashBottomNavBar.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/details/components/Body.dart';
 
 import '../../dashboard.dart';
 
 class CompanyDetailPage extends StatelessWidget {
+  final String identity;
+
+  const CompanyDetailPage({Key key, this.identity}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
       appBar: buildAppBar(),
-      body: Body(),
-     // bottomNavigationBar: buildContainer(context),
+      body: Body(identity: identity,),
+      bottomNavigationBar: DashBottomNavBar(),
     );
   }
 

@@ -8,6 +8,10 @@ import 'package:thesecurityman/details/components/SearchBox.dart';
 
 class Body extends StatelessWidget {
 
+  final String identity;
+
+  const Body({Key key, this.identity}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,7 +40,7 @@ class Body extends StatelessWidget {
                     itemIndex: index,
                     companies: companies[index],
                     press: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[index])));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[index],identity: identity,)));
                     },
                   ),
                 )

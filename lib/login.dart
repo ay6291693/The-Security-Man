@@ -7,16 +7,20 @@ import 'dashboard.dart';
 class Login extends StatefulWidget {
 
   final String value;
-  Login({Key key, this.value}) : super(key: key);
+  final String identity;
+  Login({Key key, this.value, this.identity}) : super(key: key);
 
   @override
-  LoginState createState() => LoginState();
+  LoginState createState() => LoginState(identity);
 }
 
 class LoginState extends State<Login> {
   String email;
   String password;
+
   final _formKey = new GlobalKey<FormState>();
+  final String identity;
+  LoginState(this.identity);
 
   Widget emailInput({IconData icon}){
   return InputContainer(
@@ -89,7 +93,7 @@ class LoginState extends State<Login> {
           _formKey.currentState.save();
           //Write code here to check the username and password in database
           Navigator.push(context,
-          MaterialPageRoute(builder: (context)=> Dashboard()));
+          MaterialPageRoute(builder: (context)=> Dashboard(identity: identity,username: email,)));
         },
         borderRadius: BorderRadius.circular(30),
         child: Container(
@@ -180,9 +184,16 @@ class LoginState extends State<Login> {
                           passWordInput(
                             icon: Icons.lock
                           ),
+                         Container(
+                           height: 35,
+                           child:  TextButton(
+                               onPressed: (){},
+                               child: Text('Forgot Password?',style: TextStyle(fontSize: 12),)
+                           ),
+                         ),
                           //RoundedPasswordInput(hint: 'Password'),
                           SizedBox(
-                            height: 15,
+                            height: 5,
                           ),
                           loginButton(size,context),
                          // RoundedButton(title: 'Login'),

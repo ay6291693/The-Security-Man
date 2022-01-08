@@ -57,7 +57,7 @@ class HomePageState extends State<HomePage> {
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 120),
                 onPressed: () {
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Login(value: images[0])));
+                      context, MaterialPageRoute(builder: (context) => Login(value: images[0],identity: 'Customer',)));
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(30))),
@@ -79,7 +79,7 @@ class HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Login(value: images[1])));
+                      MaterialPageRoute(builder: (context) => Login(value: images[1],identity: 'Security Man',)));
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(30))),
@@ -101,7 +101,7 @@ class HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Login(value: images[2])));
+                      MaterialPageRoute(builder: (context) => Login(value: images[2],identity: 'Business Partner',)));
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(30))),
