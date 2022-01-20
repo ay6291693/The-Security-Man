@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/details/Companies.dart';
 
@@ -42,21 +43,25 @@ class Body extends StatelessWidget {
                           child: Image.asset(companies.image, fit: BoxFit.fill,),
                         ),),
                     SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
-                    Expanded(child: SingleChildScrollView(
-                      child: Text(
-                        companies.title,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .button
-                            .copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    )),
+                    Expanded(
+                       child: SingleChildScrollView(
+                         scrollDirection: Axis.horizontal,
+                         child: Text(
+                           companies.title,
+                           style: Theme
+                               .of(context)
+                               .textTheme
+                               .button
+                               .copyWith(
+                               fontSize: 18,
+                               fontWeight: FontWeight.bold
+                           ),
+                         ),
+                       )
+                    ),
+                    SizedBox(height: 0,),
                     Text(
                       companies.location,
                         style: Theme
@@ -64,7 +69,7 @@ class Body extends StatelessWidget {
                             .textTheme
                             .button
                             .copyWith(
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.bold
                         ),
                       ),
@@ -143,7 +148,7 @@ class Body extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               "Want Security Service? Click here!",
-              style: TextStyle(color: Colors.black, fontSize: 18),
+              style: TextStyle(color: Colors.black, fontSize: 15),
             ),
           ),
         )
@@ -161,7 +166,7 @@ class Body extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               "Apply for job? Click here!",
-              style: TextStyle(color: Colors.black, fontSize: 18),
+              style: TextStyle(color: Colors.black, fontSize: 15),
             ),
           ),
         ),

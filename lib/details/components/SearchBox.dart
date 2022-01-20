@@ -8,21 +8,22 @@ class SearchBox extends StatelessWidget {
 
   final ValueChanged changed;
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(padding),
       padding: EdgeInsets.symmetric(
           horizontal: padding,
-          vertical: padding/4
+          vertical: padding/3
       ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
-          color: Colors.white.withOpacity(0.4),
+          color: Colors.white.withOpacity(0.5),
           boxShadow: [kDefaultShadow]
       ),
       child: TextField(
-        onChanged: changed,
+        onSubmitted: changed,
         style: TextStyle(
             color: Colors.white
         ),

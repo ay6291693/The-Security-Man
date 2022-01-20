@@ -23,17 +23,18 @@ class TitleWithCustomUnderline extends StatelessWidget {
               text,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20),
+                  fontSize: 18),
             ),
           ),
+          SizedBox(height: 4,),
           Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
                 margin: EdgeInsets.only(right: padding/8),
-                height: 6,
-                color: mainColor.withOpacity(0.25),
+                height: 2,
+                color: mainColor.withOpacity(0.39),
               )
           )
         ],

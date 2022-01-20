@@ -13,17 +13,17 @@ import 'package:thesecurityman/details/components/CompanyDetailPage.dart';
 
 
 class DashBody extends StatefulWidget {
-  final String identity;
+  final String identity,username;
 
-  const DashBody({Key key, this.identity}) : super(key: key);
+  const DashBody({Key key, this.identity,this.username}) : super(key: key);
   @override
-  _DashBodyState createState() => _DashBodyState(identity);
+  _DashBodyState createState() => _DashBodyState(identity,username);
 }
 
 class _DashBodyState extends State<DashBody> {
-  final String identity;
+  final String identity,username;
 
-  _DashBodyState(this.identity);
+  _DashBodyState(this.identity,this.username);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _DashBodyState extends State<DashBody> {
           TitleWithMoreBtn(
               title: "Recommended",
               press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage(identity: identity,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage(identity: identity,username: username)));
               }),
           //It will take 40% of the screen width
           RecommendedSecurityCompanies(),

@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/registerDashboard.dart';
@@ -15,12 +17,24 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  String email;
-  String password;
+
+  final TextEditingController email = new TextEditingController();
+  final TextEditingController password = new TextEditingController();
+
+  // firebase authentication
+  final _auth = FirebaseAuth.instance;
 
   final _formKey = new GlobalKey<FormState>();
   final String identity;
   LoginState(this.identity);
+
+  //to enable eye button on password
+  bool _obscureText = true;
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   Widget emailInput({IconData icon}){
   return InputContainer(
@@ -44,7 +58,7 @@ class LoginState extends State<Login> {
              return null;
            },
            onSaved: (String value){
-             email = value;
+             email.text = value;
            },
          )
        );
@@ -54,7 +68,7 @@ class LoginState extends State<Login> {
       child: TextFormField(
         //keyboardType: TextInputType.visiblePassword,
            cursorColor: Colors.black,
-           obscureText: true,
+           obscureText: _obscureText,
            decoration: InputDecoration(
              labelText: "Password",
              icon: Icon(icon,color: mainColor,),
@@ -78,7 +92,7 @@ class LoginState extends State<Login> {
              return null;
            },
            onSaved: (String value){
-             password = value;
+             password.text = value;
            },
          )
        );
@@ -91,9 +105,7 @@ class LoginState extends State<Login> {
             return;
           }
           _formKey.currentState.save();
-          //Write code here to check the username and password in database
-          Navigator.push(context,
-          MaterialPageRoute(builder: (context)=> Dashboard(identity: identity,username: email,)));
+          signIn(email.text, password.text);
         },
         borderRadius: BorderRadius.circular(30),
         child: Container(
@@ -129,6 +141,21 @@ class LoginState extends State<Login> {
         ),
       );
 }
+
+  void signIn(String email,String password) async{
+    await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((uid) => {
+      Navigator.pushAndRemoveUntil(context,
+       MaterialPageRoute(builder: (context)=> Dashboard(identity: identity,username: email,)),
+          (route)=> false),
+      Fluttertoast.showToast(msg: "Login Successful"),
+
+    },).catchError((e){
+          Fluttertoast.showToast(msg: e.toString());
+        }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,28 +208,32 @@ class LoginState extends State<Login> {
                           emailInput(
                             icon: Icons.mail,
                           ),
-                          passWordInput(
-                            icon: Icons.lock
+                          Stack(
+                            alignment: AlignmentDirectional.centerEnd,
+                            children: [
+                              passWordInput(
+                                  icon: Icons.lock
+                              ),
+                              FlatButton(
+                                  onPressed: _toggle,
+                                  child: new Icon(_obscureText?Icons.visibility:Icons.visibility_off,size: 20,))
+                            ],
                           ),
-                         Container(
+                          Container(
                            height: 35,
-                           child:  TextButton(
-                               onPressed: (){},
-                               child: Text('Forgot Password?',style: TextStyle(fontSize: 12),)
+                           child: TextButton(
+                                   onPressed: (){},
+                                   child: Text('Forgot Password?',style: TextStyle(fontSize: 12),)
+                               ),
                            ),
-                         ),
-                          //RoundedPasswordInput(hint: 'Password'),
                           SizedBox(
                             height: 5,
                           ),
                           loginButton(size,context),
-                         // RoundedButton(title: 'Login'),
                           SizedBox(
                             height: 15,
                           ),
                           registerButton(size, context)
-                          //RoundedButton(title: 'Register'),
-
                         ],
                       ),
                     ),
@@ -215,4 +246,5 @@ class LoginState extends State<Login> {
       ),
     );
   }
+
 }

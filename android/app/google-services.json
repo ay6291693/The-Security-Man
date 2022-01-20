@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "573307333874",
+    "project_id": "thesecurityman-tsm",
+    "storage_bucket": "thesecurityman-tsm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573307333874:android:12d7b2b0af5dfdfefc746b",
+        "android_client_info": {
+          "package_name": "com.example.thesecurityman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "573307333874-2i0l2o14hp32eoe91co22ppu8bobmh5o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDNuo-hCmruGZZvN3ADkpYLhv0O53YgRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "573307333874-2i0l2o14hp32eoe91co22ppu8bobmh5o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

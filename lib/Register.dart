@@ -1,5 +1,10 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:thesecurityman/Database_Models/user_model.dart';
 import 'package:thesecurityman/constants.dart';
 import 'components/input_container.dart';
 import 'homepage.dart';
@@ -15,18 +20,33 @@ class Register extends StatefulWidget{
 }
 class RegisterState extends State<Register>{
 
-  String name;
-  String phoneNum;
-  String email;
-  String password;
-  String conPassword;
+  final TextEditingController name = new TextEditingController();
+  final TextEditingController phoneNum = new TextEditingController();
+  final TextEditingController email = new TextEditingController();
+  final TextEditingController password = new TextEditingController();
+  final TextEditingController conPassword = new TextEditingController();
 
+  final _auth = FirebaseAuth.instance;
   final _formkey = new GlobalKey<FormState>();
+
+  bool _obscureText1 = true;
+  bool _obscureText2 = true;
+  void _toggle1() {
+    setState(() {
+      _obscureText1 = !_obscureText1;
+    });
+  }
+  void _toggle2() {
+    setState(() {
+      _obscureText2 = !_obscureText2;
+    });
+  }
 
   //for input data from user
   Widget nameInput({IconData icon}){
     return InputContainer(
         child: TextFormField(
+          controller: name,
           cursorColor: Colors.black,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
@@ -43,7 +63,7 @@ class RegisterState extends State<Register>{
             return null;
           },
           onSaved: (String value){
-            name = value;
+            name.text = value;
           },
         )
     );
@@ -51,6 +71,7 @@ class RegisterState extends State<Register>{
   Widget phoneInput({IconData icon}){
     return InputContainer(
         child: TextFormField(
+          controller: phoneNum,
           cursorColor: Colors.black,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
@@ -70,13 +91,17 @@ class RegisterState extends State<Register>{
               }
               return double.parse(s, (e) => null) != null;
             }
+
             if(!isNumeric(value)){
               return 'Phone number cannot have character';
+            }
+            if(value.length!=10){
+              return 'Please enter number(Max. 10 Digits)';
             }
             return null;
           },
           onSaved: (String value){
-            phoneNum = value;
+            phoneNum.text = value;
           },
         )
     );
@@ -84,6 +109,7 @@ class RegisterState extends State<Register>{
   Widget emailInput({IconData icon}){
     return InputContainer(
         child: TextFormField(
+          controller: email,
           cursorColor: Colors.black,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
@@ -103,7 +129,7 @@ class RegisterState extends State<Register>{
             return null;
           },
           onSaved: (String value){
-            email = value;
+            email.text = value;
           },
         )
     );
@@ -111,9 +137,10 @@ class RegisterState extends State<Register>{
   Widget passWordInput({IconData icon}){
     return InputContainer(
         child: TextFormField(
+          controller: password,
           //keyboardType: TextInputType.visiblePassword,
           cursorColor: Colors.black,
-          obscureText: true,
+          obscureText: _obscureText1,
           decoration: InputDecoration(
             labelText: "Password",
             icon: Icon(icon,color: mainColor,),
@@ -137,17 +164,18 @@ class RegisterState extends State<Register>{
             return null;
           },
           onSaved: (String value){
-            password = value;
+            password.text = value;
           },
         )
     );
   }
-  Widget cpassWordInput({IconData icon}){
+  Widget cPassWordInput({IconData icon}){
     return InputContainer(
         child: TextFormField(
+          controller: conPassword,
           //keyboardType: TextInputType.visiblePassword,
           cursorColor: Colors.black,
-          obscureText: true,
+          obscureText: _obscureText2,
           decoration: InputDecoration(
             labelText: "Confirm Password",
             icon: Icon(icon,color: mainColor,),
@@ -162,7 +190,7 @@ class RegisterState extends State<Register>{
             return null;
           },
           onSaved: (String value){
-            conPassword = value;
+            conPassword.text = value;
           },
         )
     );
@@ -175,38 +203,8 @@ class RegisterState extends State<Register>{
         if(!_formkey.currentState.validate()){
           return;
         }
-
         _formkey.currentState.save();
-
-        if(password != conPassword){
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text("Password is not matching"),
-                  duration: Duration(seconds: 2),
-                  backgroundColor: mainColor,
-                  behavior: SnackBarBehavior.fixed
-                  )
-          );
-        }
-        else{
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text("Saving Data... Redirecting to Login Page"),
-              duration: Duration(seconds: 2),
-              backgroundColor: Color(0xFF23408e),
-              behavior: SnackBarBehavior.fixed
-          ));
-
-          //Write code here to sent in the database
-
-          //print(name);print(phoneNum);print(email);print(password);print(conPassword);
-
-          Future.delayed(Duration(seconds: 3),(){
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context)=>  HomePage()));
-          });
-        }
-
-
+        signUp(email.text, password.text);
       },
       borderRadius: BorderRadius.circular(30),
       child: Container(
@@ -222,7 +220,50 @@ class RegisterState extends State<Register>{
       ),
     );
   }
+  
+  void signUp(String email,String password) async{
+    if(password != conPassword.text){
+      Fluttertoast.showToast(msg: "Password is not Matching");
+    }
+    else{
+      Fluttertoast.showToast(msg: "Saving Data... Redirecting to Login Page");
+      //Write code here to sent in the database
+      await _auth
+      .createUserWithEmailAndPassword(email: email, password: password)
+      .then((value) =>{
+        postDetailsToFireStore()
+      }
+      ).catchError((e)=>{
+        Fluttertoast.showToast(msg: e),
+      });
+    }
+  }
 
+  postDetailsToFireStore() async {
+    // Call the FireStore
+    //Call the UserModel
+    // sending data
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User user = _auth.currentUser;
+
+    UserModel userModel = UserModel();
+
+    userModel.uid = user.uid;
+    userModel.name = name.text;
+    userModel.email = user.email;
+    userModel.phoneNum = phoneNum.text;
+
+    await firebaseFirestore
+    .collection("users")
+    .doc(user.uid)
+    .set(userModel.toMap());
+    Fluttertoast.showToast(msg: "Account created Successfully");
+
+    Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(builder: (context)=> HomePage()), 
+        (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,32 +316,42 @@ class RegisterState extends State<Register>{
                         key: _formkey,
                         child: Column(
                           children: [
-                            //RoundedInput(icon: Icons.person, hint: 'Name',),
                             nameInput(icon: Icons.person),
                             SizedBox(
                               height: 0,
                             ),
-                            //RoundedInput(icon: Icons.phone, hint: 'Phone Number'),
                             phoneInput(icon: Icons.phone),
                             SizedBox(
                               height: 0,
                             ),
-                            //RoundedInput(icon: Icons.email, hint: 'Email'),
                             emailInput(icon: Icons.email),
                             SizedBox(
                               height: 0,
                             ),
-                            //RoundedPasswordInput(hint: 'Password'),
-                            passWordInput(icon: Icons.lock),
+                            Stack(
+                              alignment: AlignmentDirectional.centerEnd,
+                              children: [
+                                passWordInput(icon: Icons.lock),
+                                FlatButton(
+                                    onPressed: _toggle1,
+                                    child: new Icon(_obscureText1?Icons.visibility:Icons.visibility_off,size: 20,)),
+                              ],
+                            ),
                             SizedBox(
                               height: 0,
                             ),
-                            //RoundedPasswordInput(hint: 'Confirm Password'),
-                            cpassWordInput(icon: Icons.lock),
+                            Stack(
+                              alignment: AlignmentDirectional.centerEnd,
+                              children: [
+                                cPassWordInput(icon: Icons.lock),
+                                FlatButton(
+                                    onPressed: _toggle2,
+                                    child: new Icon(_obscureText2?Icons.visibility:Icons.visibility_off,size: 20,)),
+                              ],
+                            ),
                             SizedBox(
                               height: 2,
                             ),
-                            //RoundedButton(title: 'Save Details & login'),
                             saveRegisterDetailsButton(size, context)
                           ],
                         ),

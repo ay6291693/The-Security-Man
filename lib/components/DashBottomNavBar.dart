@@ -3,8 +3,9 @@ import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/dashboard.dart';
 
 class DashBottomNavBar extends StatelessWidget {
+  final String identity,username;
   const DashBottomNavBar({
-    Key key,
+    Key key, this.identity,this.username
   }) : super(key: key);
 
   @override
@@ -43,7 +44,7 @@ class DashBottomNavBar extends StatelessWidget {
             splashColor: dashColor.withOpacity(0.45),
             splashRadius: 30,
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> Dashboard(identity: identity,username: username,)));
             },
             iconSize: 28,
           ),

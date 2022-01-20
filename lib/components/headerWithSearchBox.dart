@@ -41,13 +41,14 @@ class HeaderWithSearchBox extends StatelessWidget {
                 Text("Be Assured, Be Secured",
                     style: Theme.of(context).textTheme.headline6.copyWith(
                       color: Colors.white,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     )),
-                Spacer(flex: 1,),
+                Spacer(),
                 Container(
                   child: Image.asset("assets/The.png"),
-                  height: 100,
-                  width: 100,
+                  height: 77,
+                  width: 77,
                 ),
               ],
             ),

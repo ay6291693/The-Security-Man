@@ -6,20 +6,20 @@ import 'package:thesecurityman/details/components/Body.dart';
 import '../../dashboard.dart';
 
 class CompanyDetailPage extends StatelessWidget {
-  final String identity;
+  final String identity,username;
 
-  const CompanyDetailPage({Key key, this.identity}) : super(key: key);
+  const CompanyDetailPage({Key key, this.identity,this.username}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
       appBar: buildAppBar(),
       body: Body(identity: identity,),
-      bottomNavigationBar: DashBottomNavBar(),
+      bottomNavigationBar: DashBottomNavBar(identity: identity,username: username,),
     );
   }
 
-  Container buildContainer(BuildContext context) {
+  /* Container buildContainer(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
           left: padding*2,
@@ -69,18 +69,19 @@ class CompanyDetailPage extends StatelessWidget {
         ],
       ),
     );
-  }
+  } */
 
   AppBar buildAppBar() {
     return AppBar(
       elevation: 0,
       title: Text("Security Companies",style: TextStyle(
-        fontSize: 30,
+        fontSize: 22,
         fontFamily: 'Hina',
         fontWeight: FontWeight.bold
       ),),
       centerTitle: false,
       actions: [
+        SizedBox(height: 10,),
         IconButton(icon: Icon(Icons.favorite_border), onPressed: (){})
       ],
     );

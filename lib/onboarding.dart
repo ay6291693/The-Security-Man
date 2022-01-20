@@ -83,11 +83,15 @@ class _OnboardingState extends State<Onboarding> {
                         SizedBox(
                           height: 5,
                         ),
-                        Expanded(child:  Text(
-                          contents[i].description,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: 20, color: Colors.black,fontFamily: 'Hina'),
-                        ))
+                        Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Text(
+                                contents[i].description,
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(fontSize: 20, color: Colors.black,fontFamily: 'Hina'),
+                              ),
+                            ))
 
                       ],
                     ));
