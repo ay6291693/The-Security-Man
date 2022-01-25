@@ -13,7 +13,7 @@ class UserModel{
       uid: map['uid'],
       name: map['name'],
       phoneNum: map['phoneNum'],
-      email: map['email']
+      email: map['email'],
     );
   }
   //Sending Data to our server

@@ -98,42 +98,6 @@ class Body extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        /*(identity == 'Customer' ? InkWell(
-          onTap: (){
-            //Navigator.
-          },
-          borderRadius: BorderRadius.circular(30),
-          child: Container(
-            width: size.width * 0.9,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.white),
-            padding: EdgeInsets.symmetric(vertical: 20),
-            alignment: Alignment.center,
-            child: Text(
-              "Want Security Service? Click here!",
-              style: TextStyle(color: Colors.black, fontSize: 18),
-            ),
-          ),
-        ) :
-        InkWell(
-          onTap: (){
-            //Navigator.
-          },
-          borderRadius: BorderRadius.circular(30),
-          child: Container(
-            width: size.width * 0.9,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.white),
-            padding: EdgeInsets.symmetric(vertical: 20),
-            alignment: Alignment.center,
-            child: Text(
-              "Apply for job? Click here!",
-              style: TextStyle(color: Colors.black, fontSize: 18),
-            ),
-          ),
-        )), */
         if(identity == 'Customer') InkWell(
           onTap: (){
             //Navigator.

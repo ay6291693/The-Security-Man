@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/dashboard.dart';
+import 'package:thesecurityman/profilepage.dart';
 
 class DashBottomNavBar extends StatelessWidget {
   final String identity,username;
@@ -52,7 +53,9 @@ class DashBottomNavBar extends StatelessWidget {
             icon: Icon(Icons.person),
             color: mainColor,
             splashColor: dashColor.withOpacity(0.45),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
+            },
             splashRadius: 30,
             iconSize: 28,
           ),

@@ -41,7 +41,7 @@ class _DashBodyState extends State<DashBody> {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> CompanyDetailPage(identity: identity,username: username)));
               }),
           //It will take 40% of the screen width
-          RecommendedSecurityCompanies(),
+          RecommendedSecurityCompanies(identity: identity),
           TitleWithMoreBtn(
             title: "Features",
             press: () {},

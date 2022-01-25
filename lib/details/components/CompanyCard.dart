@@ -21,6 +21,8 @@ class _CompanyCardState extends State<CompanyCard> {
   final int position;
   final Companies companies;
   final Function press;
+  bool _icon = false;
+  int click = 1;
 
   _CompanyCardState(this.itemIndex, this.position, this.companies, this.press);
 
@@ -75,8 +77,24 @@ class _CompanyCardState extends State<CompanyCard> {
                                 ),
                                 Align(
                                   alignment: Alignment.bottomRight,
-                                  child: Icon(Icons.favorite_rounded,color: mainColor),
-                                )
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                        if(click%2 ==0){
+                                          _icon = true;
+                                          click++;
+                                        }else{
+                                          _icon = false;
+                                          click++;
+                                        }
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 5),
+                                      child: _icon?Icon(Icons.favorite,color: mainColor,):Icon(Icons.favorite_outline,color: mainColor,),
+                                    ),
+                                    ),
+                                  ),
                               ],
                             )
                         )),

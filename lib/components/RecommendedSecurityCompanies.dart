@@ -6,9 +6,10 @@ import 'package:thesecurityman/details/components/CompanyDetailPage.dart';
 
 
 class RecommendedSecurityCompanies extends StatelessWidget {
+  final String identity;
 
   const RecommendedSecurityCompanies({
-    Key key,
+    Key key, this.identity,
   }) : super(key: key);
 
   @override
@@ -22,7 +23,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Bombay Intelligence Security",
             location: "Alkapuri, Vadodara",
             press: (){
-               Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[0])));
+               Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[0],identity: identity,)));
             },
           ),
           RecommendedSecurityCard(
@@ -30,7 +31,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Detective Security Service",
             location: "Alkapuri, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[1])));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[1],identity: identity,)));
             },
           ),
           RecommendedSecurityCard(
@@ -38,7 +39,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "CheckMate Security Services",
             location: "Fatehgunj, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[2])));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[2],identity: identity,)));
             },
           ),
           RecommendedSecurityCard(
@@ -46,7 +47,7 @@ class RecommendedSecurityCompanies extends StatelessWidget {
             title: "Gujarat Security Services",
             location: "Alkapuri, Vadodara",
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[3])));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailsScreen(companies: companies[3],identity: identity,)));
             },
           )
         ],

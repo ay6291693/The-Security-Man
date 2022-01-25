@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:thesecurityman/aboutus.dart';
+import 'package:thesecurityman/profilepage.dart';
 import '../constants.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
@@ -112,10 +114,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     Navigator.of(context).pop();
     switch(i){
       case 0:
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
         break;
       case 1:
         break;
       case 2:
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AboutUs()));
         break;
       case 3:
         break;
