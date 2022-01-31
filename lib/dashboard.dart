@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:thesecurityman/components/DashBottomNavBar.dart';
 import 'package:thesecurityman/components/dashbody.dart';
 import 'package:thesecurityman/constants.dart';
+import 'package:thesecurityman/login.dart';
 import 'NavigationDrawer/NavigationDrawer.dart';
 
 
@@ -19,6 +21,8 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final String identity,username;
   _DashboardState(this.identity,this.username);
+
+  var images = ["assets/Customer.jpg","assets/Splash.jpg","assets/business-partner.jpg"];
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -42,9 +46,31 @@ class _DashboardState extends State<Dashboard> {
           _scaffoldKey.currentState.openDrawer();
         },
       ),
+      actions: [
+        IconButton(icon: Icon(Icons.logout), onPressed: (){logout(context);}),
+        SizedBox(width: 18,)
+      ],
     );
   }
 
+  Future<void> logout(BuildContext context) async{
+    await FirebaseAuth.instance.signOut();
+
+    int index;
+
+    switch(identity){
+      case 'Customer':
+        index=0;
+        break;
+      case 'Security Man':
+        index=1;
+        break;
+      case 'Business Partner':
+        index=2;
+        break;
+    }
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Login(value: images[index],identity: identity,)));
+  }
 }
 
 

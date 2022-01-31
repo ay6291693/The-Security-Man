@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/details/Companies.dart';
+import 'package:thesecurityman/details/Detail_Page/JobApplyForm.dart';
+import 'package:thesecurityman/details/Detail_Page/SecurityServiceRequest.dart';
 
 class Body extends StatelessWidget {
 
@@ -98,9 +100,10 @@ class Body extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
+
         if(identity == 'Customer') InkWell(
           onTap: (){
-            //Navigator.
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> SecurityServiceRequest(companies.title)));
           },
           borderRadius: BorderRadius.circular(30),
           child: Container(
@@ -118,7 +121,7 @@ class Body extends StatelessWidget {
         )
         else if (identity == 'Security Man') InkWell(
           onTap: (){
-            //Navigator.
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>JobApplyForm(companies.title)));
           },
           borderRadius: BorderRadius.circular(30),
           child: Container(
@@ -134,6 +137,7 @@ class Body extends StatelessWidget {
             ),
           ),
         ),
+
         SizedBox(height: 15,)
       ],
     );

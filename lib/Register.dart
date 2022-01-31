@@ -259,10 +259,12 @@ class RegisterState extends State<Register>{
     .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created Successfully");
 
-    Navigator.pushAndRemoveUntil(
-        context, 
-        MaterialPageRoute(builder: (context)=> HomePage()), 
-        (route) => false);
+    Future.delayed(Duration(seconds: 2),(){
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context)=> HomePage()),
+              (route) => false);
+    });
   }
 
   @override

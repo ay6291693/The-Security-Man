@@ -107,7 +107,7 @@ class Body extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("The Company is in list: "+title),
+          Text("The Company is not in list: "+title),
         ],
       ),
       actions: <Widget>[

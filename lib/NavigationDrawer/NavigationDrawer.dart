@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesecurityman/aboutus.dart';
+import 'package:thesecurityman/contactus.dart';
 import 'package:thesecurityman/profilepage.dart';
 import '../constants.dart';
 
@@ -122,6 +123,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         Navigator.push(context, MaterialPageRoute(builder: (context)=>AboutUs()));
         break;
       case 3:
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ContactUs()));
         break;
       case 4:
         break;
