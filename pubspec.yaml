@@ -27,6 +27,9 @@ dependencies:
   file_picker: ^2.1.7
   open_file: ^3.0.3
 
+  #email authentication
+  email_auth: ^0.0.1+2
+
   #Firebase Database
   cloud_firestore: ^0.16.0+1
   firebase_auth: ^0.20.0+1

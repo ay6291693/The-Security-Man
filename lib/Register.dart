@@ -1,13 +1,20 @@
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesecurityman/Database_Models/user_model.dart';
+import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
+import 'package:thesecurityman/OtpVerify/MobileOtpVerify.dart';
+import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/constants.dart';
+import 'package:thesecurityman/homepage.dart';
 import 'components/input_container.dart';
-import 'homepage.dart';
+import 'package:email_auth/email_auth.dart';
+
 
 class Register extends StatefulWidget{
 
@@ -18,6 +25,7 @@ class Register extends StatefulWidget{
   @override
   RegisterState createState()=> RegisterState();
 }
+
 class RegisterState extends State<Register>{
 
   final TextEditingController name = new TextEditingController();
@@ -72,6 +80,7 @@ class RegisterState extends State<Register>{
     return InputContainer(
         child: TextFormField(
           controller: phoneNum,
+          maxLength: 10,
           cursorColor: Colors.black,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
@@ -113,15 +122,15 @@ class RegisterState extends State<Register>{
           cursorColor: Colors.black,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            labelText: "Username/Email",
+            labelText: "Email",
             icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
-            contentPadding: EdgeInsets.only(left: 1,top: 5,right: 15,bottom: 5),
+            contentPadding: EdgeInsets.only(left: 1,top: 5,right: 20,bottom: 5),
           ),
           validator: (String value){
             if(value.isEmpty) {
-              return 'Username/Email is required';
+              return 'Email is required';
             }
             if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
               return 'Please enter valid Username/Email';
@@ -203,8 +212,12 @@ class RegisterState extends State<Register>{
         if(!_formkey.currentState.validate()){
           return;
         }
-        _formkey.currentState.save();
-        signUp(email.text, password.text);
+        if(Constant.check==true){
+          _formkey.currentState.save();
+          signUp(email.text, password.text);
+        }else{
+          Fluttertoast.showToast(msg: "Please first verify email");
+        }
       },
       borderRadius: BorderRadius.circular(30),
       child: Container(
@@ -220,7 +233,7 @@ class RegisterState extends State<Register>{
       ),
     );
   }
-  
+
   void signUp(String email,String password) async{
     if(password != conPassword.text){
       Fluttertoast.showToast(msg: "Password is not Matching");
@@ -257,6 +270,7 @@ class RegisterState extends State<Register>{
     .collection("users")
     .doc(user.uid)
     .set(userModel.toMap());
+
     Fluttertoast.showToast(msg: "Account created Successfully");
 
     Future.delayed(Duration(seconds: 2),(){
@@ -264,7 +278,21 @@ class RegisterState extends State<Register>{
           context,
           MaterialPageRoute(builder: (context)=> HomePage()),
               (route) => false);
+      Fluttertoast.showToast(msg: "Please login using email and password");
     });
+
+
+  }
+
+  void sendOTP() async{
+    EmailAuth.sessionName = "Test Session";
+    var res = await EmailAuth.sendOtp(receiverMail: email.text);
+    if(res==true){
+      Fluttertoast.showToast(msg: "Otp sent to ${email.text}");
+    }
+    else{
+      Fluttertoast.showToast(msg: "OTP has not send");
+    }
   }
 
   @override
@@ -322,11 +350,57 @@ class RegisterState extends State<Register>{
                             SizedBox(
                               height: 0,
                             ),
+                            //for phone
+                            /* Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                Container(
+                                  height:120,
+                                  child: phoneInput(icon: Icons.phone),
+                                ),
+                                TextButton(
+                                    onPressed: (){
+                                      if (phoneNum.text==""){
+                                        Fluttertoast.showToast(msg: "Please enter Mobile Number");
+                                      }
+                                      else if(phoneNum.text.length!=10){
+                                        Fluttertoast.showToast(msg: "Mobile Number is not Valid");
+                                      }
+                                      else {
+                                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MobileOtpVerify()));
+                                      }
+                                    },
+                                    child: Text("Verify Phone Number")),
+                              ],
+                            ), */
                             phoneInput(icon: Icons.phone),
                             SizedBox(
                               height: 0,
                             ),
-                            emailInput(icon: Icons.email),
+                            //For email
+                            Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                Container(
+                                  height:120,
+                                  child: emailInput(icon: Icons.email),
+                                ),
+                                TextButton(
+                                    onPressed: (){
+                                      if (email.text==""){
+                                        Fluttertoast.showToast(msg: "Please enter Email");
+                                      }
+                                      else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.text)){
+                                        Fluttertoast.showToast(msg: "Enter a Valid Email");
+                                      }
+                                      else {
+                                        sendOTP();
+                                        Future.delayed(Duration(seconds: 2),(){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerify(email: email.text)));});
+                                      }
+                                      },
+                                    child: Text("Verify Email")),
+                              ],
+                            ),
                             SizedBox(
                               height: 0,
                             ),

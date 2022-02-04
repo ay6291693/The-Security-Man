@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:thesecurityman/ForgotPassword.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/registerDashboard.dart';
@@ -39,10 +40,11 @@ class LoginState extends State<Login> {
   Widget emailInput({IconData icon}){
   return InputContainer(
       child: TextFormField(
+        controller: email,
            cursorColor: Colors.black,
            keyboardType: TextInputType.text,
            decoration: InputDecoration(
-             labelText: "Username/Email",
+             labelText: "Email",
              icon: Icon(icon,color: mainColor,),
              border: InputBorder.none,
              focusedBorder: InputBorder.none,
@@ -50,7 +52,7 @@ class LoginState extends State<Login> {
            ),
            validator: (String value){
              if(value.isEmpty) {
-               return 'Username/Email is required';
+               return 'Email is required';
              }
              if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
                return 'Username/Email is not Valid';
@@ -67,6 +69,7 @@ class LoginState extends State<Login> {
   return InputContainer(
       child: TextFormField(
         //keyboardType: TextInputType.visiblePassword,
+        controller: password,
            cursorColor: Colors.black,
            obscureText: _obscureText,
            decoration: InputDecoration(
@@ -222,7 +225,9 @@ class LoginState extends State<Login> {
                           Container(
                            height: 35,
                            child: TextButton(
-                                   onPressed: (){},
+                                   onPressed: (){
+                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ForgotPassword()));
+                                   },
                                    child: Text('Forgot Password?',style: TextStyle(fontSize: 12),)
                                ),
                            ),
