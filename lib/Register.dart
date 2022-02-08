@@ -5,10 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesecurityman/Database_Models/user_model.dart';
 import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
-import 'package:thesecurityman/OtpVerify/MobileOtpVerify.dart';
 import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/homepage.dart';
@@ -50,6 +50,8 @@ class RegisterState extends State<Register>{
     });
   }
 
+  bool isCircular = false;
+  Size size;
   //for input data from user
   Widget nameInput({IconData icon}){
     return InputContainer(
@@ -102,10 +104,10 @@ class RegisterState extends State<Register>{
             }
 
             if(!isNumeric(value)){
-              return 'Phone number cannot have character';
+              return 'Enter only Number';
             }
             if(value.length!=10){
-              return 'Please enter number(Max. 10 Digits)';
+              return 'Please enter 10 Digits';
             }
             return null;
           },
@@ -214,9 +216,10 @@ class RegisterState extends State<Register>{
         }
         if(Constant.check==true){
           _formkey.currentState.save();
+          this.size = size;
           signUp(email.text, password.text);
         }else{
-          Fluttertoast.showToast(msg: "Please first verify email");
+          Fluttertoast.showToast(msg: "Please Verify Email First");
         }
       },
       borderRadius: BorderRadius.circular(30),
@@ -239,8 +242,17 @@ class RegisterState extends State<Register>{
       Fluttertoast.showToast(msg: "Password is not Matching");
     }
     else{
-      Fluttertoast.showToast(msg: "Saving Data... Redirecting to Login Page");
+     // Fluttertoast.showToast(msg: "Saving Data... Redirecting to Login Page");
       //Write code here to sent in the database
+      setState(() {
+        isCircular=true;
+      });
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => circular(size, context)
+      );
+
       await _auth
       .createUserWithEmailAndPassword(email: email, password: password)
       .then((value) =>{
@@ -278,15 +290,17 @@ class RegisterState extends State<Register>{
           context,
           MaterialPageRoute(builder: (context)=> HomePage()),
               (route) => false);
-      Fluttertoast.showToast(msg: "Please login using email and password");
+      setState(() {
+        isCircular=false;
+      });
+      Future.delayed(Duration(seconds: 2),(){Fluttertoast.showToast(msg: "Please login using email and password");});
     });
-
-
   }
 
   void sendOTP() async{
-    EmailAuth.sessionName = "Test Session";
+    EmailAuth.sessionName = "TSM Login Session";
     var res = await EmailAuth.sendOtp(receiverMail: email.text);
+
     if(res==true){
       Fluttertoast.showToast(msg: "Otp sent to ${email.text}");
     }
@@ -295,10 +309,28 @@ class RegisterState extends State<Register>{
     }
   }
 
+  circular(Size size,BuildContext context){
+    return AlertDialog(
+      title: Text("Loading..."),
+      content:Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Center(
+              child: SpinKitFadingCircle(
+                duration: Duration(seconds: 2),
+                color: mainColor,
+              ),
+            ),
+          ]
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double defaultLoggingSize = size.height - (size.height * 0.1);
+    double defaultLoggingSize = size.height - (size.height * 0.0);
 
     return Scaffold(
       body: Stack(
@@ -309,136 +341,122 @@ class RegisterState extends State<Register>{
             child: Container(
                 width: size.width,
                 height: defaultLoggingSize,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
                     children: [
                       SizedBox(
-                        height: 40,
+                        height: 30,
                       ),
                       Text(
                         "The Security Man",
                         style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: mainColor,fontFamily: 'Hina'),),
                       SizedBox(
-                        height: 5,
+                        height: 10,
                       ),
-                      Text(
-                        "Register As",
-                        style: TextStyle(
-                          fontSize: 35,
-                          fontFamily: 'Hina',
-                          fontWeight: FontWeight.bold
-                        ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Register As",
+                                style: TextStyle(
+                                    fontSize: 35,
+                                    fontFamily: 'Hina',
+                                    fontWeight: FontWeight.bold
+                                ),
 
-                      ),
-                      SizedBox(height: 0),
-                      Image.asset(
-                        //change of image require
-                        '${widget.value}',
-                        width: 140,
-                        height: 90,
-                      ),
-                      SizedBox(
-                        height: 0,
-                      ),
-                      Form(
-                        key: _formkey,
-                        child: Column(
-                          children: [
-                            nameInput(icon: Icons.person),
-                            SizedBox(
-                              height: 0,
-                            ),
-                            //for phone
-                            /* Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                Container(
-                                  height:120,
-                                  child: phoneInput(icon: Icons.phone),
+                              ),
+                              SizedBox(height: 0),
+                              Image.asset(
+                                //change of image require
+                                '${widget.value}',
+                                width: 140,
+                                height: 90,
+                              ),
+                              SizedBox(
+                                height: 0,
+                              ),
+                              Form(
+                                key: _formkey,
+                                child: Column(
+                                  children: [
+                                    nameInput(icon: Icons.person),
+                                    SizedBox(
+                                      height: 0,
+                                    ),
+                                    phoneInput(icon: Icons.phone),
+                                    SizedBox(
+                                      height: 0,
+                                    ),
+                                    //For email
+                                    Stack(
+                                      alignment: Alignment.bottomCenter,
+                                      children: [
+                                        Container(
+                                          height:120,
+                                          child: emailInput(icon: Icons.email),
+                                        ),
+                                        TextButton(
+                                            onPressed: (){
+                                              if (email.text==""){
+                                                Fluttertoast.showToast(msg: "Please enter Email");
+                                              }
+                                              else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.text)){
+                                                Fluttertoast.showToast(msg: "Enter a Valid Email");
+                                              }
+                                              else {
+                                                sendOTP();
+                                                Future.delayed(Duration(seconds: 2),(){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerify(email: email.text,name: "Register")));});
+                                              }
+                                            },
+                                            child: Text("Verify Email")),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 0,
+                                    ),
+                                    Stack(
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      children: [
+                                        passWordInput(icon: Icons.lock),
+                                        FlatButton(
+                                            onPressed: _toggle1,
+                                            child: new Icon(_obscureText1?Icons.visibility:Icons.visibility_off,size: 20,)),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 0,
+                                    ),
+                                    Stack(
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      children: [
+                                        cPassWordInput(icon: Icons.lock),
+                                        FlatButton(
+                                            onPressed: _toggle2,
+                                            child: new Icon(_obscureText2?Icons.visibility:Icons.visibility_off,size: 20,)),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
+                                    saveRegisterDetailsButton(size, context),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
                                 ),
-                                TextButton(
-                                    onPressed: (){
-                                      if (phoneNum.text==""){
-                                        Fluttertoast.showToast(msg: "Please enter Mobile Number");
-                                      }
-                                      else if(phoneNum.text.length!=10){
-                                        Fluttertoast.showToast(msg: "Mobile Number is not Valid");
-                                      }
-                                      else {
-                                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MobileOtpVerify()));
-                                      }
-                                    },
-                                    child: Text("Verify Phone Number")),
-                              ],
-                            ), */
-                            phoneInput(icon: Icons.phone),
-                            SizedBox(
-                              height: 0,
-                            ),
-                            //For email
-                            Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                Container(
-                                  height:120,
-                                  child: emailInput(icon: Icons.email),
-                                ),
-                                TextButton(
-                                    onPressed: (){
-                                      if (email.text==""){
-                                        Fluttertoast.showToast(msg: "Please enter Email");
-                                      }
-                                      else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.text)){
-                                        Fluttertoast.showToast(msg: "Enter a Valid Email");
-                                      }
-                                      else {
-                                        sendOTP();
-                                        Future.delayed(Duration(seconds: 2),(){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerify(email: email.text)));});
-                                      }
-                                      },
-                                    child: Text("Verify Email")),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 0,
-                            ),
-                            Stack(
-                              alignment: AlignmentDirectional.centerEnd,
-                              children: [
-                                passWordInput(icon: Icons.lock),
-                                FlatButton(
-                                    onPressed: _toggle1,
-                                    child: new Icon(_obscureText1?Icons.visibility:Icons.visibility_off,size: 20,)),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 0,
-                            ),
-                            Stack(
-                              alignment: AlignmentDirectional.centerEnd,
-                              children: [
-                                cPassWordInput(icon: Icons.lock),
-                                FlatButton(
-                                    onPressed: _toggle2,
-                                    child: new Icon(_obscureText2?Icons.visibility:Icons.visibility_off,size: 20,)),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            saveRegisterDetailsButton(size, context)
-                          ],
-                        ),
+                              )
+                            ],
+                          ),
+                        )
                       )
                     ],
-                  ),
-                )
+                  )
             ),
           ),
         ],
-      ),
+      )
     );
   }
 

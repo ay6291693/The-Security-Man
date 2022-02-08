@@ -6,8 +6,8 @@ import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
 
 class OtpVerify extends StatefulWidget {
-  final String email;
-  const OtpVerify({this.email});
+  final String email,name;
+  const OtpVerify({this.email,this.name});
   @override
   _OtpVerifyState createState() => _OtpVerifyState();
 }
@@ -87,7 +87,15 @@ class _OtpVerifyState extends State<OtpVerify> {
                   onTap: (){
                     verifyOTP();
                     if(verifiedOTP==true){
-                      Constant.check = true;
+
+                      if(widget.name=="Register"){
+                        Constant.check = true;
+                      }else if(widget.name=="JobApplyForm"){
+                        Constant.jobApplyEmailCheck=true;
+                      }else if(widget.name=="SecurityServiceRequestForm"){
+                        Constant.securityServiceRequestEmailCheck=true;
+                      }
+
                       Future.delayed(Duration(seconds: 2),(){Navigator.of(context).pop();});
                     }
                     else{

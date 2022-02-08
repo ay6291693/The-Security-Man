@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thesecurityman/components/DashBottomNavBar.dart';
 import 'package:thesecurityman/components/dashbody.dart';
 import 'package:thesecurityman/constants.dart';
@@ -55,7 +57,6 @@ class _DashboardState extends State<Dashboard> {
 
   Future<void> logout(BuildContext context) async{
     await FirebaseAuth.instance.signOut();
-
     int index;
 
     switch(identity){
@@ -69,6 +70,14 @@ class _DashboardState extends State<Dashboard> {
         index=2;
         break;
     }
+
+    Fluttertoast.showToast(msg: "Log out! Successfully");
+
+    //Removing value from sharedPreferences
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove('Email');
+    sharedPreferences.remove('Identity');
+
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Login(value: images[index],identity: identity,)));
   }
 }

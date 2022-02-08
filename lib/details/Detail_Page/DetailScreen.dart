@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:thesecurityman/components/DashBottomNavBar.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/details/Companies.dart';
 import 'package:thesecurityman/details/Detail_Page/body.dart';

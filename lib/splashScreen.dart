@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thesecurityman/constants.dart';
+import 'package:thesecurityman/dashboard.dart';
 import 'package:thesecurityman/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,14 +14,36 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+  String finalEmail,identity;
+
   @override
   void initState() {
     //set time to load new page
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Onboarding()));
+    getValidation().whenComplete(() async{
+      Future.delayed(Duration(seconds: 3), (){
+        finalEmail == null?
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Onboarding())) :
+        Navigator.pushReplacement(
+            context,MaterialPageRoute(builder: (context)=>Dashboard(identity: identity,username: finalEmail,)
+        )) ;
+      });
     });
     super.initState();
+  }
+
+  Future getValidation() async{
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var obtainedEmail = sharedPreferences.getString('Email');
+    var obtainedIdentity = sharedPreferences.getString('Identity');
+
+    print(obtainedIdentity);
+    print(obtainedEmail);
+    setState(() {
+      finalEmail = obtainedEmail;
+      identity = obtainedIdentity;
+    });
   }
 
   @override

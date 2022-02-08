@@ -30,7 +30,7 @@ class HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
@@ -43,11 +43,13 @@ class HomePageState extends State<HomePage> {
                 height: 40,
               ),
               Text(
-                "Login As",
+                "Login",
                 style: TextStyle(
-                  fontSize: 35,
-                  fontFamily: 'Hina',
-                  fontWeight: FontWeight.bold,
+                    fontSize: 35,
+                    letterSpacing: 3,
+                    fontFamily: 'Hina',
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold
                 ),
               ),
               SizedBox(
@@ -123,10 +125,10 @@ class HomePageState extends State<HomePage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterDashboard()));
                   },
                   child: Text(
-                    "Not Registered!",
+                    "Don't have Account? Click here !",
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 25,fontFamily: 'Hina',fontWeight: FontWeight.bold,
+                        fontSize: 22,fontFamily: 'Hina',fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline),)
               ),
             ],

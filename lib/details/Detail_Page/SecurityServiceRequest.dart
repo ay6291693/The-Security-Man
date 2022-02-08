@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesecurityman/Database_Models/security_service_request_data.dart';
+import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
+import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
 
@@ -62,6 +66,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
         child: TextFormField(
           controller: phoneNum,
           cursorColor: Colors.black,
+          maxLength: 10,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             labelText: "Phone Number",
@@ -82,10 +87,10 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
             }
 
             if(!isNumeric(value)){
-              return 'Phone number cannot have character';
+              return 'Enter only Number';
             }
             if(value.length!=10){
-              return 'Please enter number(Max. 10 Digits)';
+              return 'Please enter 10 Digits';
             }
             return null;
           },
@@ -129,222 +134,285 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
 
   // List of items in our dropdown menu
   List items1 = ['0','1', '2', '3', '4', '5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
-  //List items2 = ['0','1', '2', '3', '4', '5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
-  //List items3 = ['0','1', '2', '3', '4', '5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
+
+  circular(Size size,BuildContext context){
+    return new AlertDialog(
+        title: Text("Loading..."),
+        content:Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Center(
+                child: SpinKitFadingCircle(
+                  duration: Duration(seconds: 2),
+                  color: mainColor,
+                ),
+              ),
+            ]
+        )
+    );
+  }
+
+  void sendOTP() async{
+    EmailAuth.sessionName = "TSM Security Service Request Form Session";
+    var res = await EmailAuth.sendOtp(receiverMail: email.text);
+
+    if(res==true){
+      Fluttertoast.showToast(msg: "Otp sent to ${email.text}");
+    }
+    else{
+      Fluttertoast.showToast(msg: "OTP has not send");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Center(
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  child: Text(
-                    'The Security Man',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: mainColor,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                nameInput(icon: Icons.person),
-                phoneInput(icon: Icons.phone),
-                emailInput(icon: Icons.email),
-                // Number of  Security Guard
-                Container(
-                    width: size.width*0.8,
-                    padding: EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child:  Row(
-                      children: [
-                        Text("Number of Security-Guard? ",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
-                        Icon(Icons.star,color: mainColor,size: 12,)
-                      ],
-                    )
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30), color: Colors.black12),
-                  child:  DropdownButton(
-                    hint: Text("Number of Security-Guard?"),
-                    value: choose1,
-                    isExpanded: true,
-                    style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'Hina'),
-                    underline: DropdownButtonHideUnderline(child: Container()),
-                    dropdownColor: Colors.white.withOpacity(0.80),
-                    icon: Icon(Icons.arrow_drop_down,color: mainColor,),
-                    onChanged: (newValue) {
-                      setState(() {
-                        choose1 = newValue;
-                      });
-                    },
-                    items: items1.map((valueItem){
-                      return DropdownMenuItem(
-                        value: valueItem,
-                        child: Text(valueItem),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                // Number of  Security Supervisor
-                Container(
-                    width: size.width*0.8,
-                    padding: EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child:  Row(
-                      children: [
-                        Text("Number of Security-Supervisor? ",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
-                        Icon(Icons.star,color: mainColor,size: 12,)
-                      ],
-                    )
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30), color: Colors.black12),
-                  child:  DropdownButton(
-                    hint: Text("No. of Security-Supervisor?"),
-                    value: choose2,
-                    isExpanded: true,
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontFamily: 'Hina'
-                    ),
-                    underline: DropdownButtonHideUnderline(child: Container()),
-                    dropdownColor: Colors.white.withOpacity(0.80),
-                    icon: Icon(Icons.arrow_drop_down,color: mainColor,),
-                    onChanged: (newValue) {
-                      setState(() {
-                        choose2 = newValue;
-                      });
-                    },
-                    items: items1.map((valueItem){
-                      return DropdownMenuItem(
-                        value: valueItem,
-                        child: Text(valueItem),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                // Number of  Security Gunman
-                Container(
-                    width: size.width*0.8,
-                    padding: EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child:  Row(
-                      children: [
-                        Text("No. of Security GunMan? ",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
-                        Icon(Icons.star,color: mainColor,size: 12,)
-                      ],
-                    )
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30), color: Colors.black12),
-                  child:  DropdownButton(
-                    hint: Text("No. of Security GunMan?"),
-                    isExpanded: true,
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      fontFamily: 'Hina'
-                    ),
-                    underline: DropdownButtonHideUnderline(child: Container()),
-                    value: choose3,
-                    dropdownColor: Colors.white.withOpacity(0.80),
-                    icon: Icon(Icons.arrow_drop_down,color: mainColor,),
-                    onChanged: (newValue) {
-                      setState(() {
-                        choose3 = newValue;
-                      });
-                    },
-                    items: items1.map((valueItem){
-                      return DropdownMenuItem(
-                        value: valueItem,
-                        child: Text(valueItem),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                Container(
-                    width: size.width*0.8,
-                    padding: EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child:  Row(
-                      children: [
-                        Icon(Icons.star,color:mainColor,size: 10,),
-                        Text(" Field denote they are mandatory ",style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
-                      ],
-                    )
-                ),
-
-                GestureDetector(
-                  onTap: (){
-                    var form = formKey.currentState;
-
-                    int status1=0,status2=1;
-                    if (form.validate()) {
-                      status1=1;
-                      form.save();
-                    }
-                    if(choose1==null||choose2==null||choose3==null){
-                      status2=0;
-                      Fluttertoast.showToast(msg: "Select the Respected Requirement of Security Person");
-                    }
-                    if(status1==1 && status2==1){
-
-                      Fluttertoast.showToast(msg: "Sending the Request ...");
-                      sendingDataToFireStore();
-
-                      Future.delayed(Duration(seconds: 3),(){
-                        Navigator.pop(context);
-                        Fluttertoast.showToast(msg: "Your Data are Stored. You will be contacted by the TSM team shortly...");
-                      });
-
-                    }
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.symmetric(vertical: 18),
-                    width: size.width * 0.8,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30), color: mainColor),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'SEND REQUEST',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-              ],
-            ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 40,
           ),
-        ),
+          Container(
+            child: Text(
+              "The Security Man",
+              style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: mainColor,fontFamily: 'Hina'),),
+          ),
+          Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Center(
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20,
+                        ),
+                        nameInput(icon: Icons.person),
+                        phoneInput(icon: Icons.phone),
+                        Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              height:120,
+                              child: emailInput(icon: Icons.email),
+                            ),
+                            TextButton(
+                                onPressed: (){
+                                  if (email.text==""){
+                                    Fluttertoast.showToast(msg: "Please enter Email");
+                                  }
+                                  else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.text)){
+                                    Fluttertoast.showToast(msg: "Enter a Valid Email");
+                                  }
+                                  else {
+                                    sendOTP();
+                                    Future.delayed(Duration(seconds: 2),(){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerify(email: email.text,name: "SecurityServiceRequestForm")));});
+                                  }
+                                },
+                                child: Text("Verify Email")),
+                          ],
+                        ),
+                        // Number of  Security Guard
+                        Container(
+                            width: size.width*0.8,
+                            padding: EdgeInsets.only(left: 10),
+                            alignment: Alignment.centerLeft,
+                            child:  Row(
+                              children: [
+                                Text("Number of Security-Guard? ",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
+                                Icon(Icons.star,color: mainColor,size: 12,)
+                              ],
+                            )
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+                          width: size.width * 0.8,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30), color: Colors.black12),
+                          child:  DropdownButton(
+                            hint: Text("Number of Security-Guard?"),
+                            value: choose1,
+                            isExpanded: true,
+                            style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: 'Hina'),
+                            underline: DropdownButtonHideUnderline(child: Container()),
+                            dropdownColor: Colors.white.withOpacity(0.80),
+                            icon: Icon(Icons.arrow_drop_down,color: mainColor,),
+                            onChanged: (newValue) {
+                              setState(() {
+                                choose1 = newValue;
+                              });
+                            },
+                            items: items1.map((valueItem){
+                              return DropdownMenuItem(
+                                value: valueItem,
+                                child: Text(valueItem),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        // Number of  Security Supervisor
+                        Container(
+                            width: size.width*0.8,
+                            padding: EdgeInsets.only(left: 10),
+                            alignment: Alignment.centerLeft,
+                            child:  Row(
+                              children: [
+                                Text("Number of Security-Supervisor? ",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
+                                Icon(Icons.star,color: mainColor,size: 12,)
+                              ],
+                            )
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+                          width: size.width * 0.8,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30), color: Colors.black12),
+                          child:  DropdownButton(
+                            hint: Text("No. of Security-Supervisor?"),
+                            value: choose2,
+                            isExpanded: true,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontFamily: 'Hina'
+                            ),
+                            underline: DropdownButtonHideUnderline(child: Container()),
+                            dropdownColor: Colors.white.withOpacity(0.80),
+                            icon: Icon(Icons.arrow_drop_down,color: mainColor,),
+                            onChanged: (newValue) {
+                              setState(() {
+                                choose2 = newValue;
+                              });
+                            },
+                            items: items1.map((valueItem){
+                              return DropdownMenuItem(
+                                value: valueItem,
+                                child: Text(valueItem),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        // Number of  Security Gunman
+                        Container(
+                            width: size.width*0.8,
+                            padding: EdgeInsets.only(left: 10),
+                            alignment: Alignment.centerLeft,
+                            child:  Row(
+                              children: [
+                                Text("No. of Security GunMan? ",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
+                                Icon(Icons.star,color: mainColor,size: 12,)
+                              ],
+                            )
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+                          width: size.width * 0.8,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30), color: Colors.black12),
+                          child:  DropdownButton(
+                            hint: Text("No. of Security GunMan?"),
+                            isExpanded: true,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontFamily: 'Hina'
+                            ),
+                            underline: DropdownButtonHideUnderline(child: Container()),
+                            value: choose3,
+                            dropdownColor: Colors.white.withOpacity(0.80),
+                            icon: Icon(Icons.arrow_drop_down,color: mainColor,),
+                            onChanged: (newValue) {
+                              setState(() {
+                                choose3 = newValue;
+                              });
+                            },
+                            items: items1.map((valueItem){
+                              return DropdownMenuItem(
+                                value: valueItem,
+                                child: Text(valueItem),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        Container(
+                            width: size.width*0.8,
+                            padding: EdgeInsets.only(left: 10),
+                            alignment: Alignment.centerLeft,
+                            child:  Row(
+                              children: [
+                                Icon(Icons.star,color:mainColor,size: 10,),
+                                Text("Field denote they are mandatory ",style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold,fontFamily: 'Hina',letterSpacing: 1.5),),
+                              ],
+                            )
+                        ),
+
+                        GestureDetector(
+                          onTap: (){
+                            var form = formKey.currentState;
+
+                            int status1=0,status2=1,status3=1;
+
+                            if(form.validate()) {
+                              status1=1;
+                              form.save();
+                            }
+                            if(choose1==null||choose2==null||choose3==null){
+                              status2=0;
+                              Fluttertoast.showToast(msg: "Select the Respected Requirement of Security Person");
+                            }
+                            if(!Constant.securityServiceRequestEmailCheck){
+                              status3=0;
+                              Fluttertoast.showToast(msg: "Please Verify Email First");
+                            }
+                            if(status1==1 && status2==1&&status3==1){
+
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context)=> circular(size, context)
+                              );
+
+                              Fluttertoast.showToast(msg: "Sending the Request ...");
+
+                              sendingDataToFireStore();
+
+                              Future.delayed(Duration(seconds: 3),(){
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Fluttertoast.showToast(msg: "You will be contacted by the TSM team shortly...");
+                              });
+
+                            }
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(vertical: 18),
+                            width: size.width * 0.8,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30), color: mainColor),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'SEND REQUEST',
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          )
+        ],
       )
     );
   }

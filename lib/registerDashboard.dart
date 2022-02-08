@@ -16,11 +16,6 @@ class _RegisterDashboardState extends State<RegisterDashboard> {
     var images = ["assets/Customer.jpg","assets/Splash.jpg","assets/business-partner.jpg"];
 
     return Scaffold(
-     /* appBar: AppBar(
-        title: Text("The Security Man"),
-        backgroundColor: Colors.deepOrange,
-        //automaticallyImplyLeading: false,
-      ), */
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -37,10 +32,12 @@ class _RegisterDashboardState extends State<RegisterDashboard> {
                 height: 40,
               ),
               Text(
-                "Register As",
+                "Registration",
                 style: TextStyle(
                     fontSize: 35,
+                    letterSpacing: 3,
                     fontFamily: 'Hina',
+                    color: Colors.black87,
                     fontWeight: FontWeight.bold
                 ),
               ),
@@ -117,10 +114,10 @@ class _RegisterDashboardState extends State<RegisterDashboard> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                   },
                   child: Text(
-                    "Already Have An Account!",
+                    "Already has Account? Click Here!",
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 25,fontFamily: 'Hina',fontWeight: FontWeight.bold,
+                        fontSize: 22,fontFamily: 'Hina',fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline),)
               ),
             ],

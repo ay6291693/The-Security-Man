@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thesecurityman/ForgotPassword.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
@@ -36,6 +38,9 @@ class LoginState extends State<Login> {
       _obscureText = !_obscureText;
     });
   }
+
+  bool isCircular = false;
+  Size size;
 
   Widget emailInput({IconData icon}){
   return InputContainer(
@@ -100,14 +105,23 @@ class LoginState extends State<Login> {
          )
        );
 }
-
   Widget loginButton(Size size, BuildContext context){
   return InkWell(
-        onTap: (){
+        onTap: () async{
           if(!_formKey.currentState.validate()){
             return;
           }
+          if(mounted){
+            setState(() {
+              isCircular=true;
+            });
+          }
           _formKey.currentState.save();
+
+          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          sharedPreferences.setString('Email', email.text);
+          sharedPreferences.setString('Identity', identity);
+
           signIn(email.text, password.text);
         },
         borderRadius: BorderRadius.circular(30),
@@ -146,24 +160,63 @@ class LoginState extends State<Login> {
 }
 
   void signIn(String email,String password) async{
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => circular(size, context)
+    );
+
     await _auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((uid) => {
-      Navigator.pushAndRemoveUntil(context,
-       MaterialPageRoute(builder: (context)=> Dashboard(identity: identity,username: email,)),
-          (route)=> false),
-      Fluttertoast.showToast(msg: "Login Successful"),
-
+          work(email,password),
     },).catchError((e){
+          Navigator.of(context, rootNavigator: true).pop();
           Fluttertoast.showToast(msg: e.toString());
         }
+    );
+  }
+
+  void work(String email,String password){
+
+   Future.delayed(Duration(seconds: 2),(){
+     Navigator.pushAndRemoveUntil(context,
+         MaterialPageRoute(builder: (context)=> Dashboard(identity: identity,username: email,)),
+             (route)=> false);
+     Fluttertoast.showToast(msg: "Login Successful");
+
+     Future.delayed(Duration(seconds: 1,),(){
+       if(mounted){
+         setState(() {
+           isCircular=false;
+         });
+       }
+     });
+   });
+  }
+
+  circular(Size size,BuildContext context){
+    return new AlertDialog(
+        title: Text("Loading..."),
+        content:Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Center(
+                child: SpinKitFadingCircle(
+                  duration: Duration(seconds: 2),
+                  color: mainColor,
+                ),
+              ),
+            ]
+        )
     );
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double defaultLoggingSize = size.height - (size.height * 0.1);
+    double defaultLoggingSize = size.height - (size.height * 0.0);
 
     return Scaffold(
       body: Stack(
@@ -174,81 +227,93 @@ class LoginState extends State<Login> {
             child: Container(
               width: size.width,
               height: defaultLoggingSize,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 100,
-                    ),
-                    Text(
-                      "The Security Man",
-                      style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: mainColor,fontFamily: 'Hina'),),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      'Logging As ...',
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontFamily: 'Hina',
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Image.asset(
-                      //change of image require
-                      '${widget.value}',
-                      width: 150,
-                      height: 150,
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          emailInput(
-                            icon: Icons.mail,
-                          ),
-                          Stack(
-                            alignment: AlignmentDirectional.centerEnd,
-                            children: [
-                              passWordInput(
-                                  icon: Icons.lock
-                              ),
-                              FlatButton(
-                                  onPressed: _toggle,
-                                  child: new Icon(_obscureText?Icons.visibility:Icons.visibility_off,size: 20,))
-                            ],
-                          ),
-                          Container(
-                           height: 35,
-                           child: TextButton(
-                                   onPressed: (){
-                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ForgotPassword()));
-                                   },
-                                   child: Text('Forgot Password?',style: TextStyle(fontSize: 12),)
+              child: Column(
+                   children: [
+                     SizedBox(
+                       height: 30,
+                     ),
+                     Text(
+                  "The Security Man",
+                  style: TextStyle(fontSize: 45,fontWeight: FontWeight.bold,color: mainColor,fontFamily: 'Hina'),),
+                     SizedBox(
+                       height: 20,
+                     ),
+                     Expanded(
+                       child: SingleChildScrollView(
+                         child:  Column(
+                           crossAxisAlignment: CrossAxisAlignment.center,
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             SizedBox(
+                               height: 30,
+                             ),
+                             Text(
+                               'Logging As ...',
+                               style: TextStyle(
+                                   fontSize: 35,
+                                   fontFamily: 'Hina',
+                                   fontWeight: FontWeight.bold
                                ),
-                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          loginButton(size,context),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          registerButton(size, context)
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ),
+                             ),
+                             SizedBox(height: 5),
+                             Image.asset(
+                               //change of image require
+                               '${widget.value}',
+                               width: 150,
+                               height: 150,
+                             ),
+                             Form(
+                               key: _formKey,
+                               child: Column(
+                                 mainAxisAlignment: MainAxisAlignment.center,
+                                 children: [
+                                   emailInput(
+                                     icon: Icons.mail,
+                                   ),
+                                   Stack(
+                                     alignment: AlignmentDirectional.centerEnd,
+                                     children: [
+                                       passWordInput(
+                                           icon: Icons.lock
+                                       ),
+                                       FlatButton(
+                                           onPressed: _toggle,
+                                           child: new Icon(_obscureText?Icons.visibility:Icons.visibility_off,size: 20,))
+                                     ],
+                                   ),
+                                   Container(
+                                     height: 35,
+                                     child: TextButton(
+                                         onPressed: (){
+                                           Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ForgotPassword()));
+                                         },
+                                         child: Text('Forgot Password?',style: TextStyle(fontSize: 12),)
+                                     ),
+                                   ),
+                                   SizedBox(
+                                     height: 5,
+                                   ),
+                                   loginButton(size,context),
+                                   SizedBox(
+                                     height: 15,
+                                   ),
+                                   registerButton(size, context),
+                                   SizedBox(
+                                     height: 20,
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                     )
+                   ],
+                )
           ),
-        ],
-      ),
+          )
+        ]
+      )
     );
   }
 
