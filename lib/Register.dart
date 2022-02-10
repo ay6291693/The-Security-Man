@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +15,7 @@ import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/homepage.dart';
 import 'components/input_container.dart';
 import 'package:email_auth/email_auth.dart';
-
+import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget{
 
@@ -52,6 +53,8 @@ class RegisterState extends State<Register>{
 
   bool isCircular = false;
   Size size;
+  bool isPhoneNumberVerified=false;
+
   //for input data from user
   Widget nameInput({IconData icon}){
     return InputContainer(
@@ -214,7 +217,11 @@ class RegisterState extends State<Register>{
         if(!_formkey.currentState.validate()){
           return;
         }
-        if(Constant.check==true){
+        if(isPhoneNumberVerified==false){
+          Fluttertoast.showToast(msg: "Please Verify Phone Number First");
+          return;
+        }
+        else if(Constant.check==true){
           _formkey.currentState.save();
           this.size = size;
           signUp(email.text, password.text);
@@ -327,6 +334,27 @@ class RegisterState extends State<Register>{
     );
   }
 
+  void getDataFromApi() async{
+    var response = await http.get(
+        Uri.http("apilayer.net", "/api/validate",
+            {"access_key":"c8dc85eefd805c9a85a140b594f2cd88","number":"${phoneNum.text}","country_code":"IN","format":"format"}
+            ));
+
+    var jsonData = jsonDecode(response.body);
+    print(jsonData);
+
+    if(jsonData["valid"]==true){
+      setState(() {
+        isPhoneNumberVerified=true;
+      });
+      Fluttertoast.showToast(msg: "Phone number verified");
+    }
+    else{
+      Fluttertoast.showToast(msg: "Phone number not verified\n\n \t Enter Correct Number");
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -385,7 +413,29 @@ class RegisterState extends State<Register>{
                                     SizedBox(
                                       height: 0,
                                     ),
-                                    phoneInput(icon: Icons.phone),
+                                    //for phone
+                                    Stack(
+                                      alignment: Alignment.bottomCenter,
+                                      children: [
+                                        Container(
+                                          height:120,
+                                          child: phoneInput(icon: Icons.phone),
+                                        ),
+                                        TextButton(
+                                            onPressed: (){
+                                              if (phoneNum.text==" "){
+                                                Fluttertoast.showToast(msg: "Please enter PhoneNumber");
+                                              }
+                                              else if(phoneNum.text.length!=10){
+                                                Fluttertoast.showToast(msg: "Enter a Valid PhoneNumber");
+                                              }
+                                              else {
+                                                getDataFromApi();
+                                              }
+                                            },
+                                            child: Text("Verify Phone Number")),
+                                      ],
+                                    ),
                                     SizedBox(
                                       height: 0,
                                     ),
@@ -459,5 +509,14 @@ class RegisterState extends State<Register>{
       )
     );
   }
+}
+
+class PhoneVerifyData{
+
+  final String number,country_code,location,carrier;
+  final bool valid;
+
+  PhoneVerifyData(this.number, this.country_code, this.location, this.carrier, this.valid);
+
 
 }

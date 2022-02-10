@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_auth/email_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +12,7 @@ import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
 import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
+import 'package:http/http.dart' as http;
 
 class SecurityServiceRequest extends StatefulWidget {
   final String company;
@@ -131,6 +134,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
 
   // Initial Selected Value
   String choose1,choose2,choose3;
+  bool isPhoneNumberVerified=false;
 
   // List of items in our dropdown menu
   List items1 = ['0','1', '2', '3', '4', '5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
@@ -192,7 +196,30 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
                           height: 20,
                         ),
                         nameInput(icon: Icons.person),
-                        phoneInput(icon: Icons.phone),
+                        //For phone number
+                        Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              height:130,
+                              child: phoneInput(icon: Icons.phone),
+                            ),
+                            TextButton(
+                                onPressed: (){
+                                  if (phoneNum.text==""){
+                                    Fluttertoast.showToast(msg: "Please enter Phone Number");
+                                  }
+                                  else if(phoneNum.text.length!=10){
+                                    Fluttertoast.showToast(msg: "Enter a Valid Phone Number");
+                                  }
+                                  else {
+                                    getDataFromApi();
+                                  }
+                                },
+                                child: Text("Verify Phone Number")),
+                          ],
+                        ),
+                        //For email
                         Stack(
                           alignment: Alignment.bottomCenter,
                           children: [
@@ -357,7 +384,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
                           onTap: (){
                             var form = formKey.currentState;
 
-                            int status1=0,status2=1,status3=1;
+                            int status1=0,status2=1,status3=1,status4=1;
 
                             if(form.validate()) {
                               status1=1;
@@ -371,7 +398,11 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
                               status3=0;
                               Fluttertoast.showToast(msg: "Please Verify Email First");
                             }
-                            if(status1==1 && status2==1&&status3==1){
+                            if(isPhoneNumberVerified==false){
+                              status4=0;
+                              Fluttertoast.showToast(msg: "Please Verify Phone Number First");
+                            }
+                            if(status1==1 && status2==1&&status3==1&&status4==1){
 
                               showDialog(
                                   context: context,
@@ -437,6 +468,27 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
     .collection("SecurityServiceRequest")
     .doc(user.uid)
     .set(securityServiceRequest.toMap());
+
+  }
+
+  void getDataFromApi() async{
+    var response = await http.get(
+        Uri.http("apilayer.net", "/api/validate",
+            {"access_key":"c8dc85eefd805c9a85a140b594f2cd88","number":"${phoneNum.text}","country_code":"IN","format":"format"}
+        ));
+
+    var jsonData = jsonDecode(response.body);
+    print(jsonData);
+
+    if(jsonData["valid"]==true){
+      setState(() {
+        isPhoneNumberVerified=true;
+      });
+      Fluttertoast.showToast(msg: "Phone number verified");
+    }
+    else{
+      Fluttertoast.showToast(msg: "Phone number not verified\n\n \t Enter Correct Number");
+    }
 
   }
 }
