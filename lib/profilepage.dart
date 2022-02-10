@@ -1,24 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thesecurityman/Database_Models/user_model.dart';
 import 'package:thesecurityman/constants.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String identity;
-  const ProfilePage({Key key,this.identity}) : super(key: key);
+  const ProfilePage({Key key}) : super(key: key);
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
 
-   String profileImage;
+   String profileImage="assets/The.png";
 
   User user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
-  void setProfileImage(String identity){
+  void setProfileImage() async{
+
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String identity = sharedPreferences.get('Identity');
+
+    print(identity);
     if(identity=="Customer"){
       this.profileImage="assets/Customer.jpg";
     }else if(identity=="Security Man"){
@@ -27,10 +32,10 @@ class _ProfilePageState extends State<ProfilePage> {
       this.profileImage="assets/business-partner.jpg";
     }
   }
+  
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    setProfileImage(widget.identity);
 
     FirebaseFirestore.instance
         .collection("users")
@@ -40,6 +45,8 @@ class _ProfilePageState extends State<ProfilePage> {
       this.loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
+
+    setProfileImage();
   }
 
   @override

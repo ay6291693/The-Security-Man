@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,8 @@ import 'package:thesecurityman/OtpVerify/MobileOtpVerify.dart';
 import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/homepage.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'components/input_container.dart';
 import 'package:email_auth/email_auth.dart';
 import 'package:http/http.dart' as http;
@@ -58,6 +61,33 @@ class RegisterState extends State<Register>{
   Size size;
   bool isPhoneNumberVerified=false;
   int _otp;
+
+  var internetConnection;
+
+  void internetCheck() async{
+    internetConnection = await Connectivity().checkConnectivity();
+    print(internetConnection);
+    if(internetConnection == ConnectivityResult.mobile){
+      //
+    }else if(internetConnection == ConnectivityResult.wifi){
+      //
+    }else{
+      showTopSnackBar(
+        context,
+        CustomSnackBar.error(
+          message:
+          "No Internet",
+        ),
+      );
+    }
+
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    internetCheck();
+  }
 
   //for input data from user
   Widget nameInput({IconData icon}){
@@ -225,6 +255,11 @@ class RegisterState extends State<Register>{
           Fluttertoast.showToast(msg: "Please Verify Phone Number First");
           return;
         }
+        internetCheck();
+        if(internetConnection==ConnectivityResult.none){
+          return;
+        }
+
          if(Constant.check==true){
           _formkey.currentState.save();
           this.size = size;
@@ -359,7 +394,6 @@ class RegisterState extends State<Register>{
 
   }
 
-
   void sendOtp(String phoneNum){
 
     int _minOtpValue, _maxOtpValue;
@@ -379,7 +413,6 @@ class RegisterState extends State<Register>{
     
     sender.sendSms(new SmsMessage(address,"Your OTP for TSM Registration is: "+_otp.toString()));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -537,4 +570,5 @@ class RegisterState extends State<Register>{
       )
     );
   }
+
 }

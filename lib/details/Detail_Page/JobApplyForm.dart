@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_auth/email_auth.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +21,8 @@ import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class JobApplyForm extends StatefulWidget {
   final String company;
@@ -53,9 +56,31 @@ class _JobApplyFormState extends State<JobApplyForm> {
 
   int _otp;
 
+  var internetConnection;
+
+  void internetCheck() async{
+    internetConnection = await Connectivity().checkConnectivity();
+    print(internetConnection);
+    if(internetConnection == ConnectivityResult.mobile){
+      //
+    }else if(internetConnection == ConnectivityResult.wifi){
+      //
+    }else{
+      showTopSnackBar(
+        context,
+        CustomSnackBar.error(
+          message:
+          "No Internet",
+        ),
+      );
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
+    internetCheck();
   }
 
   Widget nameInput({IconData icon}){
@@ -420,7 +445,7 @@ class _JobApplyFormState extends State<JobApplyForm> {
                         GestureDetector(
                           onTap: (){
                             var form = formKey.currentState;
-                            int status1=0,status2=1,status3=1,status4=1,status5=1;
+                            int status1=0,status2=1,status3=1,status4=1,status5=1,status6=1;
 
                             if (form.validate()) {
                               status1=1;
@@ -442,7 +467,11 @@ class _JobApplyFormState extends State<JobApplyForm> {
                               status5=0;
                               Fluttertoast.showToast(msg: "Please Verify Phone Number First");
                             }
-                            if(status1==1 && status2==1 && status3==1&& status4==1&& status5==1){
+                            internetCheck();
+                            if(internetConnection==ConnectivityResult.none){
+
+                            }
+                            if(status1==1 && status2==1 && status3==1&& status4==1&& status5==1 &&status6==1){
 
                               showDialog(
                                   context: context,

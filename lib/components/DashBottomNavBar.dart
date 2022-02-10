@@ -57,7 +57,7 @@ class DashBottomNavBar extends StatelessWidget {
             color: mainColor,
             splashColor: dashColor.withOpacity(0.45),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(identity: identity,)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
             },
             splashRadius: 30,
             iconSize: 28,

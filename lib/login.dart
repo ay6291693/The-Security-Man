@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,6 +8,8 @@ import 'package:thesecurityman/ForgotPassword.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/registerDashboard.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'dashboard.dart';
 
 class Login extends StatefulWidget {
@@ -38,9 +41,35 @@ class LoginState extends State<Login> {
       _obscureText = !_obscureText;
     });
   }
-
   bool isCircular = false;
   Size size;
+
+  var internetConnection;
+
+  void internetCheck() async{
+     internetConnection = await Connectivity().checkConnectivity();
+    print(internetConnection);
+    if(internetConnection == ConnectivityResult.mobile){
+      //
+    }else if(internetConnection == ConnectivityResult.wifi){
+     //
+    }else{
+      showTopSnackBar(
+        context,
+        CustomSnackBar.error(
+          message:
+          "No Internet",
+        ),
+      );
+    }
+    
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    internetCheck();
+  }
 
   Widget emailInput({IconData icon}){
   return InputContainer(
@@ -111,6 +140,10 @@ class LoginState extends State<Login> {
           if(!_formKey.currentState.validate()){
             return;
           }
+          internetCheck();
+          if(internetConnection==ConnectivityResult.none){
+            return;
+          }
           if(mounted){
             setState(() {
               isCircular=true;
@@ -175,6 +208,7 @@ class LoginState extends State<Login> {
           Fluttertoast.showToast(msg: e.toString());
         }
     );
+
   }
 
   void work(String email,String password){
