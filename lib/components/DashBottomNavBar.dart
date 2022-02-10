@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/dashboard.dart';
 import 'package:thesecurityman/profilepage.dart';
@@ -36,7 +37,9 @@ class DashBottomNavBar extends StatelessWidget {
             color: mainColor,
             splashColor: dashColor.withOpacity(0.45),
             splashRadius: 30,
-            onPressed: () {},
+            onPressed: () {
+              Fluttertoast.showToast(msg: "Favourite Feature will be added in next update");
+            },
             iconSize: 28,
           ),
           IconButton(
@@ -54,7 +57,7 @@ class DashBottomNavBar extends StatelessWidget {
             color: mainColor,
             splashColor: dashColor.withOpacity(0.45),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage(identity: identity,)));
             },
             splashRadius: 30,
             iconSize: 28,

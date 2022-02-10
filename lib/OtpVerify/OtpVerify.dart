@@ -44,7 +44,7 @@ class _OtpVerifyState extends State<OtpVerify> {
     );
   }
 
-  void verifyOTP(){
+  void verifyEmailOTP(){
     var res = EmailAuth.validate(receiverMail: widget.email, userOTP: otp.text);
 
     if(res){
@@ -85,7 +85,7 @@ class _OtpVerifyState extends State<OtpVerify> {
               Container(
                 child: InkWell(
                   onTap: (){
-                    verifyOTP();
+                    verifyEmailOTP();
                     if(verifiedOTP==true){
 
                       if(widget.name=="Register"){

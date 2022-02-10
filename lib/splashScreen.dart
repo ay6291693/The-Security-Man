@@ -71,9 +71,25 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(
                   height: 80,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Proudly Made in India!",style: TextStyle(fontSize: 20, fontFamily: 'Hina'),),
+                    SizedBox(width: 20,),
+                    Container(
+                      height: 80,
+                      width: 80,
+                      child: Image.asset("assets/Indian-Flag.png"),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
-                  "All Rights Are Reserved, Since @ 2021",
-                  style: TextStyle(fontSize: 20, fontFamily: 'Hina'),
+                  "All rights are reserved, since @ 2021",
+                  style: TextStyle(fontSize: 16, fontFamily: 'Hina'),
                 )
               ])),
     ));

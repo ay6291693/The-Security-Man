@@ -5,19 +5,33 @@ import 'package:thesecurityman/Database_Models/user_model.dart';
 import 'package:thesecurityman/constants.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key key}) : super(key: key);
+  final String identity;
+  const ProfilePage({Key key,this.identity}) : super(key: key);
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
 
+   String profileImage;
+
   User user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
+  void setProfileImage(String identity){
+    if(identity=="Customer"){
+      this.profileImage="assets/Customer.jpg";
+    }else if(identity=="Security Man"){
+      this.profileImage="assets/Splash.jpg";
+    }else{
+      this.profileImage="assets/business-partner.jpg";
+    }
+  }
   @override
   void initState() {
     super.initState();
+    setProfileImage(widget.identity);
+
     FirebaseFirestore.instance
         .collection("users")
         .doc(user.uid)
@@ -87,10 +101,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Text(
                   "Profile",
                   style: TextStyle(
-                    fontSize: 30,
-                    letterSpacing: 10,
+                    fontSize: 40,
+                    letterSpacing: 8,
                     color: Colors.white,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -102,9 +116,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   border: Border.all(color: Colors.blue, width: 5),
                   shape: BoxShape.circle,
                   color: Colors.white,
-                  image: const DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/Customer.jpg'),
+                  image:  DecorationImage(
+                    fit: BoxFit.contain,
+                    image: AssetImage(profileImage),
                   ),
                 ),
               ),
@@ -117,56 +131,70 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 450,
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                       "Name: ${loggedInUser.name}",
-                      style: TextStyle(
-                        fontSize: 20,
-                        letterSpacing: 1.5,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 80,
                       ),
-                    ),
-                    Text(
-                      'Phone No : ${loggedInUser.phoneNum}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        letterSpacing: 1.5,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      Text(
+                        "Name: ${loggedInUser.name}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          letterSpacing: 1.5,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Email : ${loggedInUser.email}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        letterSpacing: 1.5,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
+                      SizedBox(
+                        height: 30,
                       ),
-                    ),
-                    SizedBox(
-                      height: 55,
-                      //width: double.infinity,
-                      // ignore: deprecated_member_use
-                      child: RaisedButton(
-                        onPressed: null,
-                        color: mainColor,
+                      Text(
+                        'Phone No : ${loggedInUser.phoneNum}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          letterSpacing: 1.5,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text(
+                        'Email : ${loggedInUser.email}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          letterSpacing: 1.5,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 60,
+                      ),
+                      SizedBox(
+                        height: 55,
+                        //width: double.infinity,
+                        // ignore: deprecated_member_use
                         child: Center(
                           child: Text(
                             "Be Assured, Be Secure",
                             style: TextStyle(
-                              fontSize: 23,
-                              color: Colors.white,
+                              fontSize: 25,
+                              color: mainColor,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                      )
+                    ],
+                  ),
+                )
               )
             ],
           ),
@@ -176,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
               backgroundColor: Colors.blue,
               child: IconButton(
                 icon: const Icon(
-                  Icons.edit,
+                  Icons.verified_user,
                   color: Colors.white,
                 ),
                 onPressed: () {},

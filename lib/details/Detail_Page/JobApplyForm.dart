@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:email_auth/email_auth.dart';
@@ -11,8 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
+import 'package:sms/sms.dart';
 import 'package:thesecurityman/Database_Models/job_apply_form.dart';
 import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
+import 'package:thesecurityman/OtpVerify/MobileOtpVerify.dart';
 import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
@@ -47,6 +50,8 @@ class _JobApplyFormState extends State<JobApplyForm> {
 
   bool isEmailVerified;
   bool isPhoneNumberVerified=false;
+
+  int _otp;
 
   @override
   void initState() {
@@ -124,7 +129,7 @@ class _JobApplyFormState extends State<JobApplyForm> {
           cursorColor: Colors.black,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            labelText: "Username/Email",
+            labelText: "Email",
             icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -132,10 +137,10 @@ class _JobApplyFormState extends State<JobApplyForm> {
           ),
           validator: (String value){
             if(value.isEmpty) {
-              return 'Username/Email is required';
+              return 'Email is required';
             }
             if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
-              return 'Please enter valid Username/Email';
+              return 'Please enter valid Email';
             }
             return null;
           },
@@ -195,7 +200,7 @@ class _JobApplyFormState extends State<JobApplyForm> {
     );
   }
 
-  void sendOTP() async{
+  void sendEmailOTP() async{
     EmailAuth.sessionName = "TSM Job Apply Form Session";
     var res = await EmailAuth.sendOtp(receiverMail: email.text);
 
@@ -205,6 +210,26 @@ class _JobApplyFormState extends State<JobApplyForm> {
     else{
       Fluttertoast.showToast(msg: "OTP has not send");
     }
+  }
+
+  void sendOtp(String phoneNum){
+
+    int _minOtpValue, _maxOtpValue;
+
+    void generateOtp([int min = 1000, int max = 9999]) {
+      //Generates four digit OTP by default
+      _minOtpValue = min;
+      _maxOtpValue = max;
+      _otp = _minOtpValue + Random().nextInt(_maxOtpValue - _minOtpValue);
+    }
+
+    generateOtp();
+
+    SmsSender sender = new SmsSender();
+
+    String address = '+91' + phoneNum;
+
+    sender.sendSms(new SmsMessage(address,"Your OTP for TSM Registration is: "+_otp.toString()));
   }
 
   @override
@@ -251,7 +276,9 @@ class _JobApplyFormState extends State<JobApplyForm> {
                                     Fluttertoast.showToast(msg: "Enter a Valid Email");
                                   }
                                   else {
-                                   getDataFromApi();
+                                   //getDataFromApi();
+                                    sendOtp(phoneNum.text);
+                                    Navigator.push(context,MaterialPageRoute(builder: (context)=>MobileOtpVerify(otp: _otp,name: "JobApplyForm",)));
                                   }
                                 },
                                 child: Text("Verify Phone Number")),
@@ -274,7 +301,7 @@ class _JobApplyFormState extends State<JobApplyForm> {
                                     Fluttertoast.showToast(msg: "Enter a Valid Email");
                                   }
                                   else {
-                                    sendOTP();
+                                    sendEmailOTP();
                                     Future.delayed(Duration(seconds: 2),(){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerify(email: email.text,name: "JobApplyForm",)));});
                                   }
                                 },
@@ -411,7 +438,7 @@ class _JobApplyFormState extends State<JobApplyForm> {
                               status4=0;
                               Fluttertoast.showToast(msg: "Please Verify Email First");
                             }
-                            if(isPhoneNumberVerified==false){
+                            if(Constant.phoneOtpVerifyForJobApplyForm==false){
                               status5=0;
                               Fluttertoast.showToast(msg: "Please Verify Phone Number First");
                             }

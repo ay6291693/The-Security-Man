@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
 
 class MobileOtpVerify extends StatefulWidget {
+  final int otp;
+  final String name;
+  const MobileOtpVerify({this.otp,this.name});
   @override
   _MobileOtpVerifyState createState() => _MobileOtpVerifyState();
 }
 
 class _MobileOtpVerifyState extends State<MobileOtpVerify> {
 
-  final phoneNum = new TextEditingController();
+  final OTP = new TextEditingController();
 
-  Widget phoneInput({IconData icon}){
+  Widget otpInput({IconData icon}){
     return InputContainer(
         child: TextFormField(
-          controller: phoneNum,
-          maxLength: 10,
+          controller: OTP,
+          maxLength: 4,
           cursorColor: Colors.black,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            labelText: "Phone Number",
+            labelText: "Enter OTP",
             icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -27,7 +32,7 @@ class _MobileOtpVerifyState extends State<MobileOtpVerify> {
           ),
           validator: (String value){
             if(value.isEmpty) {
-              return 'Phone number is required';
+              return 'OTP is required';
             }
             bool isNumeric(String s) {
               if(s == null) {
@@ -37,18 +42,26 @@ class _MobileOtpVerifyState extends State<MobileOtpVerify> {
             }
 
             if(!isNumeric(value)){
-              return 'Phone number cannot have character';
+              return 'OTP cannot have character';
             }
-            if(value.length!=10){
-              return 'Please enter number(Max. 10 Digits)';
+            if(value.length!=4){
+              return 'OTP Length is 4 Digits';
             }
             return null;
           },
           onSaved: (String value){
-            phoneNum.text = value;
+            OTP.text = value;
           },
         )
     );
+  }
+
+  bool resultChecker(int enteredOtp) {
+    //To validate OTP
+    if(enteredOtp == widget.otp){
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -74,14 +87,29 @@ class _MobileOtpVerifyState extends State<MobileOtpVerify> {
               SizedBox(
                 height: 100,
               ),
-              phoneInput(icon: Icons.phone),
+              otpInput(icon: Icons.phone),
               SizedBox(
                 height: 50,
               ),
               Container(
                 child: InkWell(
                   onTap: (){
+                    if(resultChecker(int.parse(OTP.text))){
+                      Fluttertoast.showToast(msg: "OTP is Valid");
+                      //MobileOTP Verify used three places (Register,JobApplyForm,SecurityServiceRequest)
+                      if(widget.name=="Register"){
+                        Constant.phoneOtpVerifyForRegister=true;
+                      }else if(widget.name=="JobApplyForm"){
+                        Constant.phoneOtpVerifyForJobApplyForm=true;
+                      }else{
+                        Constant.phoneOtpVerifyForSecurityServiceRequest=true;
+                      }
 
+                      Future.delayed(Duration(seconds: 2),(){Navigator.of(context).pop();});
+
+                    }else{
+                      Fluttertoast.showToast(msg: "OTP is not valid");
+                    }
                   },
                   borderRadius: BorderRadius.circular(30),
                   child: Container(

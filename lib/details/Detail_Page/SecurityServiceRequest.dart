@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_auth/email_auth.dart';
@@ -7,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sms/sms.dart';
 import 'package:thesecurityman/Database_Models/security_service_request_data.dart';
 import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
+import 'package:thesecurityman/OtpVerify/MobileOtpVerify.dart';
 import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/components/input_container.dart';
 import 'package:thesecurityman/constants.dart';
@@ -33,6 +36,8 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
   final name = new TextEditingController();
   final phoneNum = new TextEditingController();
   final email = new TextEditingController();
+
+  int _otp;
 
   @override
   void initState() {
@@ -110,7 +115,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
           cursorColor: Colors.black,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            labelText: "Username/Email",
+            labelText: "Email",
             icon: Icon(icon,color: mainColor,),
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
@@ -118,10 +123,10 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
           ),
           validator: (String value){
             if(value.isEmpty) {
-              return 'Username/Email is required';
+              return 'Email is required';
             }
             if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
-              return 'Please enter valid Username/Email';
+              return 'Please enter valid Email';
             }
             return null;
           },
@@ -157,7 +162,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
     );
   }
 
-  void sendOTP() async{
+  void sendEmailOTP() async{
     EmailAuth.sessionName = "TSM Security Service Request Form Session";
     var res = await EmailAuth.sendOtp(receiverMail: email.text);
 
@@ -167,6 +172,26 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
     else{
       Fluttertoast.showToast(msg: "OTP has not send");
     }
+  }
+
+  void sendOtp(String phoneNum){
+
+    int _minOtpValue, _maxOtpValue;
+
+    void generateOtp([int min = 1000, int max = 9999]) {
+      //Generates four digit OTP by default
+      _minOtpValue = min;
+      _maxOtpValue = max;
+      _otp = _minOtpValue + Random().nextInt(_maxOtpValue - _minOtpValue);
+    }
+
+    generateOtp();
+
+    SmsSender sender = new SmsSender();
+
+    String address = '+91' + phoneNum;
+
+    sender.sendSms(new SmsMessage(address,"Your OTP for TSM Registration is: "+_otp.toString()));
   }
 
   @override
@@ -213,7 +238,8 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
                                     Fluttertoast.showToast(msg: "Enter a Valid Phone Number");
                                   }
                                   else {
-                                    getDataFromApi();
+                                    sendOtp(phoneNum.text);
+                                    Navigator.push(context,MaterialPageRoute(builder: (context)=>MobileOtpVerify(otp: _otp,name: "SecurityServiceRequest",)));
                                   }
                                 },
                                 child: Text("Verify Phone Number")),
@@ -224,7 +250,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
                           alignment: Alignment.bottomCenter,
                           children: [
                             Container(
-                              height:120,
+                              height:130,
                               child: emailInput(icon: Icons.email),
                             ),
                             TextButton(
@@ -236,7 +262,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
                                     Fluttertoast.showToast(msg: "Enter a Valid Email");
                                   }
                                   else {
-                                    sendOTP();
+                                    sendEmailOTP();
                                     Future.delayed(Duration(seconds: 2),(){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerify(email: email.text,name: "SecurityServiceRequestForm")));});
                                   }
                                 },
@@ -398,7 +424,7 @@ class _SecurityServiceRequestState extends State<SecurityServiceRequest> {
                               status3=0;
                               Fluttertoast.showToast(msg: "Please Verify Email First");
                             }
-                            if(isPhoneNumberVerified==false){
+                            if(Constant.phoneOtpVerifyForSecurityServiceRequest==false){
                               status4=0;
                               Fluttertoast.showToast(msg: "Please Verify Phone Number First");
                             }

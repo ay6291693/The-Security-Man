@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sms/sms.dart';
 import 'package:thesecurityman/Database_Models/user_model.dart';
 import 'package:thesecurityman/OtpVerify/ConstantForOTP.dart';
+import 'package:thesecurityman/OtpVerify/MobileOtpVerify.dart';
 import 'package:thesecurityman/OtpVerify/OtpVerify.dart';
 import 'package:thesecurityman/constants.dart';
 import 'package:thesecurityman/homepage.dart';
@@ -54,6 +57,7 @@ class RegisterState extends State<Register>{
   bool isCircular = false;
   Size size;
   bool isPhoneNumberVerified=false;
+  int _otp;
 
   //for input data from user
   Widget nameInput({IconData icon}){
@@ -217,11 +221,11 @@ class RegisterState extends State<Register>{
         if(!_formkey.currentState.validate()){
           return;
         }
-        if(isPhoneNumberVerified==false){
+        if(Constant.phoneOtpVerifyForRegister==false){
           Fluttertoast.showToast(msg: "Please Verify Phone Number First");
           return;
         }
-        else if(Constant.check==true){
+         if(Constant.check==true){
           _formkey.currentState.save();
           this.size = size;
           signUp(email.text, password.text);
@@ -304,7 +308,7 @@ class RegisterState extends State<Register>{
     });
   }
 
-  void sendOTP() async{
+  void sendEmailOTP() async{
     EmailAuth.sessionName = "TSM Login Session";
     var res = await EmailAuth.sendOtp(receiverMail: email.text);
 
@@ -354,6 +358,28 @@ class RegisterState extends State<Register>{
     }
 
   }
+
+
+  void sendOtp(String phoneNum){
+
+    int _minOtpValue, _maxOtpValue;
+
+    void generateOtp([int min = 1000, int max = 9999]) {
+      //Generates four digit OTP by default
+       _minOtpValue = min;
+       _maxOtpValue = max;
+       _otp = _minOtpValue + Random().nextInt(_maxOtpValue - _minOtpValue);
+    }
+
+    generateOtp();
+
+    SmsSender sender = new SmsSender();
+
+    String address = '+91' + phoneNum;
+    
+    sender.sendSms(new SmsMessage(address,"Your OTP for TSM Registration is: "+_otp.toString()));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -430,7 +456,9 @@ class RegisterState extends State<Register>{
                                                 Fluttertoast.showToast(msg: "Enter a Valid PhoneNumber");
                                               }
                                               else {
-                                                getDataFromApi();
+                                                //getDataFromApi();
+                                                sendOtp(phoneNum.text);
+                                                Navigator.push(context,MaterialPageRoute(builder: (context)=>MobileOtpVerify(otp: _otp,name: "Register",)));
                                               }
                                             },
                                             child: Text("Verify Phone Number")),
@@ -456,7 +484,7 @@ class RegisterState extends State<Register>{
                                                 Fluttertoast.showToast(msg: "Enter a Valid Email");
                                               }
                                               else {
-                                                sendOTP();
+                                                sendEmailOTP();
                                                 Future.delayed(Duration(seconds: 2),(){Navigator.of(context).push(MaterialPageRoute(builder: (context)=>OtpVerify(email: email.text,name: "Register")));});
                                               }
                                             },
@@ -509,14 +537,4 @@ class RegisterState extends State<Register>{
       )
     );
   }
-}
-
-class PhoneVerifyData{
-
-  final String number,country_code,location,carrier;
-  final bool valid;
-
-  PhoneVerifyData(this.number, this.country_code, this.location, this.carrier, this.valid);
-
-
 }
