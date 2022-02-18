@@ -14,6 +14,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
    String profileImage="assets/The.png";
+   String name,email,phone;
 
   User user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
@@ -32,19 +33,24 @@ class _ProfilePageState extends State<ProfilePage> {
       this.profileImage="assets/business-partner.jpg";
     }
   }
-  
+
+  void firebaseGetData() async{
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+
+  }
   @override
   void initState(){
     super.initState();
 
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(user.uid)
-        .get()
-        .then((value){
-      this.loggedInUser = UserModel.fromMap(value.data());
-      setState(() {});
-    });
+    firebaseGetData();
 
     setProfileImage();
   }
